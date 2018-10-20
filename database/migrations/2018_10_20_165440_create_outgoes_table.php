@@ -16,9 +16,12 @@ class CreateOutgoesTable extends Migration
     public function up()
     {
         Schema::create('outgoes', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->bigInteger('car_id')->unsigned();
+            $table->uuid('id');
+            $table->primary('id');
+
+            $table->uuid('car_id');
             $table->foreign('car_id')->references('id')->on('cars');
+
             $table->string('description');
             $table->float('quantity');
             $table->timestamps();
