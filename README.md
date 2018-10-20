@@ -1,8 +1,13 @@
 <p align="center">
+
 [![GitHub issues](https://img.shields.io/github/issues/cristian-g/sharing-api.svg)](https://github.com/cristian-g/sharing-api/issues)
+
 [![GitHub forks](https://img.shields.io/github/forks/cristian-g/sharing-api.svg)](https://github.com/cristian-g/sharing-api/network)
+
 [![GitHub stars](https://img.shields.io/github/stars/cristian-g/sharing-api.svg)](https://github.com/cristian-g/sharing-api/stargazers)
+
 [![GitHub license](https://img.shields.io/github/license/cristian-g/sharing-api.svg)](https://github.com/cristian-g/sharing-api/blob/master/LICENSE)
+
 [![Twitter](https://img.shields.io/twitter/url/https/github.com/cristian-g/sharing-api.svg?style=social)](https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgithub.com%2Fcristian-g%2Fsharing-api)
 </p>
 
@@ -12,7 +17,7 @@ This project is about listing the cars owned by the user and the ones shared wit
 
 ## Stack
 
-This project uses Laravel [Laravel](https://laravel.com/docs) PHP framework.
+This project uses [Laravel](https://laravel.com/docs) PHP framework.
 - [Routing engine](https://laravel.com/docs/routing).
 - [Dependency injection container](https://laravel.com/docs/container).
 - [Database ORM](https://laravel.com/docs/eloquent).
