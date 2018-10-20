@@ -32,6 +32,7 @@ class OutgoController extends Controller
 
         $outgo = new Outgo([
             'quantity' => $request->quantity,
+            'description' => $request->description,
         ]);
         $outgo->car()->associate($firstCar);
         $outgo->save();

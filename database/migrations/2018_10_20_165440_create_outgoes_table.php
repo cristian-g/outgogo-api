@@ -19,6 +19,7 @@ class CreateOutgoesTable extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('car_id')->unsigned();
             $table->foreign('car_id')->references('id')->on('cars');
+            $table->string('description');
             $table->float('quantity');
             $table->timestamps();
         });
@@ -26,10 +27,18 @@ class CreateOutgoesTable extends Migration
         $firstCar = Car::first();
 
         $outgo1 = new Outgo([
-            'quantity' => 12.40,
+            'description' => 'Fuel',
+            'quantity' => 52.40,
         ]);
         $outgo1->car()->associate($firstCar);
         $outgo1->save();
+
+        $outgo2 = new Outgo([
+            'description' => 'Insurance',
+            'quantity' => 130.15,
+        ]);
+        $outgo2->car()->associate($firstCar);
+        $outgo2->save();
     }
 
     /**
