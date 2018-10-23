@@ -16,7 +16,7 @@ class OutgoController extends Controller
     public function index()
     {
         $firstCar = Car::first();
-        $outgoes = Outgo::all();
+        $outgoes = Outgo::orderBy('created_at', 'asc')->get();
         return response()->json(['outgoes'=> $outgoes->toArray()], 200);
     }
 
