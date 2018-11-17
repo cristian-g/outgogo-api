@@ -27,10 +27,10 @@ class Outgo extends Model
     ];
 
     /**
-     * Get the related car.
+     * Get the related vehicle.
      */
-    public function car()
+    public function vehicle()
     {
-        return $this->belongsTo('App\Car', 'car_id');
+        return $this->belongsTo('App\Vehicle', 'vehicle_id');
     }
 }

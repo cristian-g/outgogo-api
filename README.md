@@ -6,7 +6,7 @@
 
 ## About this project
 
-This project is about listing the cars owned by the user and the ones shared with him. In the near future it will be possible to use this application to manage different expenses of each car to distribute them to the users using the same car.
+This project is about listing the vehicles owned by the user and the ones shared with him. In the near future it will be possible to use this application to manage different expenses of each vehicle to distribute them to the users using the same vehicle.
 
 ## Stack
 
@@ -32,7 +32,7 @@ The API has the following endpoints:
     "outgoes": [
         {
             "id": "880a9860-d49f-11e8-90d8-8d9e25676284",
-            "car_id": "88025b70-d49f-11e8-8406-09ce9e0936d3",
+            "vehicle_id": "88025b70-d49f-11e8-8406-09ce9e0936d3",
             "description": "Fuel",
             "quantity": 52.4,
             "created_at": "2018-10-20 19:36:14",
@@ -40,7 +40,7 @@ The API has the following endpoints:
         },
         {
             "id": "880b3000-d49f-11e8-865c-a9ccf6db1393",
-            "car_id": "88025b70-d49f-11e8-8406-09ce9e0936d3",
+            "vehicle_id": "88025b70-d49f-11e8-8406-09ce9e0936d3",
             "description": "Insurance",
             "quantity": 130.15,
             "created_at": "2018-10-20 19:37:08",
@@ -48,7 +48,7 @@ The API has the following endpoints:
         },
         {
             "id": "970ecce0-d49f-11e8-99fe-05fb94320627",
-            "car_id": "88025b70-d49f-11e8-8406-09ce9e0936d3",
+            "vehicle_id": "88025b70-d49f-11e8-8406-09ce9e0936d3",
             "description": "Wash",
             "quantity": 15,
             "created_at": "2018-10-20 19:37:33",

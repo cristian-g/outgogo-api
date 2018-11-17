@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Outgo;
 use Illuminate\Http\Request;
-use App\Vehicle;
 
-class OutgoController extends Controller
+class VehicleController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,9 +13,17 @@ class OutgoController extends Controller
      */
     public function index()
     {
-        $firstVehicle = Vehicle::first();
-        $outgoes = Outgo::orderBy('created_at', 'asc')->get();
-        return response()->json(['outgoes'=> $outgoes->toArray()], 200);
+        //
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
     }
 
     /**
@@ -28,14 +34,7 @@ class OutgoController extends Controller
      */
     public function store(Request $request)
     {
-        $firstVehicle = Vehicle::first();
-
-        $outgo = new Outgo([
-            'quantity' => $request->quantity,
-            'description' => $request->description,
-        ]);
-        $outgo->vehicle()->associate($firstVehicle);
-        $outgo->save();
+        //
     }
 
     /**
@@ -45,6 +44,17 @@ class OutgoController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
     {
         //
     }

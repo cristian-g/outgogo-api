@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Car extends Model
+class Vehicle extends Model
 {
     use Uuids;
 
@@ -25,10 +25,10 @@ class Car extends Model
     ];
 
     /**
-     * Get the outgoes of this car.
+     * Get the outgoes of this vehicle.
      */
     public function outgoes()
     {
-        return $this->hasMany('App\Outgo', 'car_id');
+        return $this->hasMany('App\Outgo', 'vehicle_id');
     }
 }
