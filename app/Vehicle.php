@@ -21,7 +21,12 @@ class Vehicle extends Model
      * @var array
      */
     protected $fillable = [
-        'name',
+        'brand',
+        'model',
+        'private_key',
+        'public_key',
+        'purchase_year',
+        'purchase_price',
     ];
 
     /**
@@ -30,5 +35,13 @@ class Vehicle extends Model
     public function outgoes()
     {
         return $this->hasMany('App\Outgo', 'vehicle_id');
+    }
+
+    /**
+     * Get the users of this vehicle.
+     */
+    public function users()
+    {
+        return $this->belongsToMany('App\User');
     }
 }

@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Outgo;
+use App\OutgoCategory;
+use App\User;
 use Illuminate\Http\Request;
 use App\Vehicle;
+use Illuminate\Support\Facades\DB;
 
 class OutgoController extends Controller
 {
@@ -28,13 +31,33 @@ class OutgoController extends Controller
      */
     public function store(Request $request)
     {
-        $firstVehicle = Vehicle::first();
+        $vehicle = Vehicle::where([
+            "private_key" => $request->vehicle_private_key,
+        ])->first();
+
+        $relation_data = DB::table('user_vehicle')->where([
+            "vehicle_id" => $vehicle->id,
+            "public_key" => $request->user_public_key,
+        ])->first();
+
+        $user = User::find($relation_data->user_id);
 
         $outgo = new Outgo([
             'quantity' => $request->quantity,
             'description' => $request->description,
+            //'notes' => $request->notes, // only add them if filled in request!
+            //'share_outgo' => $request->share_outgo, // only add them if filled in request!
+            //'points' => $request->points, // only add them if filled in request!
         ]);
-        $outgo->vehicle()->associate($firstVehicle);
+
+        $outgoCategory = OutgoCategory::where([
+            'key_name' => 'drive'
+        ])->first();
+
+        $outgo->vehicle()->associate($vehicle);
+        $outgo->user()->associate($user);
+        $outgo->outgoCategory()->associate($outgoCategory);
+
         $outgo->save();
     }
 

@@ -33,10 +33,10 @@ class CreateOutgoesTable extends Migration
             $table->string('description');
             $table->unsignedDecimal('quantity', 8, 2);
 
-            $table->text('notes');
-            $table->boolean('share_outgo');
+            $table->string('notes', 500)->default('');
+            $table->boolean('share_outgo')->default(true);
 
-            $table->unsignedInteger('points');
+            $table->unsignedInteger('points')->default(0);
 
             $table->timestamps();
         });

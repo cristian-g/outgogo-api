@@ -20,6 +20,9 @@ class CreateOutgoCategoriesTable extends Migration
 
             $table->timestamps();
         });
+        \App\OutgoCategory::create([
+            'key_name' => 'drive'
+        ]);
     }
 
     /**

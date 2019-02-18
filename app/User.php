@@ -22,7 +22,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'surnames', 'email', 'password',
     ];
 
     /**
@@ -33,4 +33,12 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    /**
+     * Get the vehicles of this user.
+     */
+    public function vehicles()
+    {
+        return $this->hasMany('App\Vehicle');
+    }
 }

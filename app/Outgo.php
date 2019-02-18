@@ -23,7 +23,7 @@ class Outgo extends Model
      * @var array
      */
     protected $fillable = [
-        'description', 'quantity',
+        'description', 'quantity', 'notes', 'share_outgo', 'points'
     ];
 
     /**
@@ -32,5 +32,21 @@ class Outgo extends Model
     public function vehicle()
     {
         return $this->belongsTo('App\Vehicle', 'vehicle_id');
+    }
+
+    /**
+     * Get the related user.
+     */
+    public function user()
+    {
+        return $this->belongsTo('App\User', 'user_id');
+    }
+
+    /**
+     * Get the outgo category.
+     */
+    public function outgoCategory()
+    {
+        return $this->belongsTo('App\OutgoCategory', 'outgo_category_id');
     }
 }

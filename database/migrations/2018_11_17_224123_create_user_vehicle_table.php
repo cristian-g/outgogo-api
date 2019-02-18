@@ -14,7 +14,7 @@ class CreateUserVehicleTable extends Migration
     public function up()
     {
         Schema::create('user_vehicle', function (Blueprint $table) {
-            $table->uuid('id'); $table->primary('id');
+            //$table->uuid('id'); $table->primary('id');
 
             // User
             $table->uuid('user_id');
@@ -25,9 +25,17 @@ class CreateUserVehicleTable extends Migration
             $table->foreign('vehicle_id')->references('id')->on('vehicles');
 
             $table->boolean('is_owner');
+            $table->string('public_key');
+            $table->unique(['vehicle_id', 'public_key']);
 
             $table->timestamps();
         });
+        $first_user = \App\User::first();
+        $first_vehicle = \App\Vehicle::first();
+        $first_vehicle->users()->attach($first_user, [
+            'public_key' => '2f4c',
+            'is_owner' => false
+        ]);
     }
 
     /**
