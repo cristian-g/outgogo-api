@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
+use App\Vehicle;
+use Auth0\Login\Facade\Auth0;
 use Illuminate\Http\Request;
 
 class VehicleController extends Controller
@@ -13,17 +16,10 @@ class VehicleController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        $userInfo = Auth0::jwtUser();
+        $user = User::where('auth0id', $userInfo->sub)->first();
+        $vehicles = $user->vehicles()->orderBy('created_at', 'desc')->get();
+        return response()->json(['vehicles'=> $vehicles->toArray()], 200);
     }
 
     /**
@@ -34,7 +30,23 @@ class VehicleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $userInfo = Auth0::jwtUser();
+        $user = User::where('auth0id', $userInfo->sub)->first();
+        $bytes = 40;
+        $vehicle = new Vehicle([
+            'brand' => 'A',
+            'model' => 'A',
+            'private_key' => bin2hex(openssl_random_pseudo_bytes($bytes)),// will generate a random string of alphanumeric characters of length = $bytes * 2
+            'public_key' => bin2hex(openssl_random_pseudo_bytes(40)),//'a39u',
+            'purchase_year' => 2014,
+            'purchase_price' => 12392.29,
+        ]);
+        $vehicle->save();
+        $vehicle->users()->attach($user, [
+            'public_key' => '2f4c',
+            'is_owner' => true
+        ]);
+        return response()->json(null, 200);
     }
 
     /**
@@ -44,17 +56,6 @@ class VehicleController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
     {
         //
     }

@@ -16,9 +16,10 @@ class CreateUsersTable extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->uuid('id'); $table->primary('id');
             $table->string('name');
-            $table->string('surnames');
+            $table->string('auth0id')->unique();
+            $table->string('surnames')->default('');
             $table->string('email')->unique();
-            $table->string('password');
+            $table->string('password')->nullable()->default(null);
             $table->timestamp('last_tos_acceptance')->useCurrent();
             $table->timestamps();
         });
@@ -26,6 +27,7 @@ class CreateUsersTable extends Migration
             'name' => 'A',
             'surnames' => 'A',
             'email' => 'A',
+            'auth0id' => 'sample_id',
             'password' => 'A',
         ]);
     }

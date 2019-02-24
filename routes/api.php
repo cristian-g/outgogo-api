@@ -18,6 +18,12 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 // ------------------------------
+// Vehicles
+// ------------------------------
+Route::get('/vehicles', 'VehicleController@index')->middleware('jwt');
+Route::post('/vehicle', 'VehicleController@store')->middleware('jwt');//->middleware('check.scope:read:email');
+
+// ------------------------------
 // Outgoes
 // ------------------------------
 Route::get('/outgoes', 'OutgoController@index');
