@@ -33,6 +33,11 @@ class CheckJWT
         $auth0 = \App::make('auth0');
 
         $accessToken = $request->bearerToken();
+
+        if (!isset($accessToken)) {
+            return response()->json(["errors" => ["Es necesario iniciar sesión para realizar esta acción."]], 401);
+        }
+
         try {
             $tokenInfo = $auth0->decodeJWT($accessToken);
             $user = $this->userRepository->getUserByDecodedJWT($tokenInfo);
