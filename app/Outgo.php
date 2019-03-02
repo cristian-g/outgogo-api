@@ -26,6 +26,8 @@ class Outgo extends Model
         'description', 'quantity', 'notes', 'share_outgo', 'points'
     ];
 
+    protected $appends = ['category'];
+
     /**
      * Get the related vehicle.
      */
@@ -48,5 +50,10 @@ class Outgo extends Model
     public function outgoCategory()
     {
         return $this->belongsTo('App\OutgoCategory', 'outgo_category_id');
+    }
+
+    public function getCategoryAttribute()
+    {
+        return $this->outgoCategory()->first()->getKeyName();
     }
 }

@@ -8,6 +8,7 @@ use App\User;
 use Illuminate\Http\Request;
 use App\Vehicle;
 use Illuminate\Support\Facades\DB;
+use Auth0\Login\Facade\Auth0;
 
 class OutgoController extends Controller
 {
@@ -18,9 +19,6 @@ class OutgoController extends Controller
      */
     public function index()
     {
-        $firstVehicle = Vehicle::first();
-        $outgoes = Outgo::orderBy('created_at', 'asc')->get();
-        return response()->json(['outgoes'=> $outgoes->toArray()], 200);
     }
 
     /**
@@ -29,7 +27,7 @@ class OutgoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function storeFromVehicle(Request $request)
     {
         $vehicle = Vehicle::where([
             "private_key" => $request->vehicle_private_key,
@@ -48,6 +46,40 @@ class OutgoController extends Controller
             //'notes' => $request->notes, // only add them if filled in request!
             //'share_outgo' => $request->share_outgo, // only add them if filled in request!
             //'points' => $request->points, // only add them if filled in request!
+        ]);
+
+        $outgoCategory = OutgoCategory::where([
+            'key_name' => 'drive'
+        ])->first();
+
+        $outgo->vehicle()->associate($vehicle);
+        $outgo->user()->associate($user);
+        $outgo->outgoCategory()->associate($outgoCategory);
+
+        $outgo->save();
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request, $vehicle_id)
+    {
+        $vehicle = Vehicle::where([
+            "id" => $vehicle_id,
+        ])->first();
+
+        $userInfo = Auth0::jwtUser();
+        $user = User::where('auth0id', $userInfo->sub)->first();
+
+        $outgo = new Outgo([
+            'quantity' => $request->quantity,
+            'description' => $request->description,
+            'notes' => $request->notes,
+            'share_outgo' => $request->share_outgo,
+            'points' => $request->quantity * 100,
         ]);
 
         $outgoCategory = OutgoCategory::where([

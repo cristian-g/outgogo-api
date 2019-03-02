@@ -21,10 +21,15 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 // Vehicles
 // ------------------------------
 Route::get('/vehicles', 'VehicleController@index')->middleware('jwt');
+Route::get('/vehicle/{id}', 'VehicleController@show')->middleware('jwt');
 Route::post('/vehicle', 'VehicleController@store')->middleware('jwt');//->middleware('check.scope:read:email');
+
+// ------------------------------
+// Actions
+// ------------------------------
+Route::get('/vehicle/{vehicle_id}/actions', 'ActionController@index')->middleware('jwt');
 
 // ------------------------------
 // Outgoes
 // ------------------------------
-Route::get('/outgoes', 'OutgoController@index');
-Route::post('/outgoes', 'OutgoController@store');
+Route::post('/vehicle/{vehicle_id}/outgo', 'OutgoController@store')->middleware('jwt');

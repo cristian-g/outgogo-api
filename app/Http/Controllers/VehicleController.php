@@ -69,7 +69,9 @@ class VehicleController extends Controller
      */
     public function show($id)
     {
-        //
+        $vehicle = Vehicle::find($id);
+        $vehicle["actions"] = $vehicle->outgoes()->orderBy('created_at', 'desc')->get()->toArray();
+        return response()->json(['vehicle'=> $vehicle], 200);
     }
 
     /**
