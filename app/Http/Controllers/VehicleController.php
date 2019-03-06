@@ -83,7 +83,27 @@ class VehicleController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $vehicle = Vehicle::find($id);
+
+        $bytes = 40;
+        $vehicle->update([
+            'brand' => $request->brand,
+            'model' => $request->model,
+            'private_key' => bin2hex(openssl_random_pseudo_bytes($bytes)),// will generate a random string of alphanumeric characters of length = $bytes * 2
+            'public_key' => $request->key,//bin2hex(openssl_random_pseudo_bytes(40)),//'a39u',
+            'purchase_year' => $request->year,
+            'purchase_price' => $request->price,
+        ]);
+        $vehicle->save();
+
+        // Attach other users
+        foreach ($request->emails as $email) {
+            $user = User::where('email', $email)->first();
+            $vehicle->users()->attach($user, [
+                'public_key' => bin2hex(openssl_random_pseudo_bytes(40)),
+                'is_owner' => false
+            ]);
+        }
     }
 
     /**
