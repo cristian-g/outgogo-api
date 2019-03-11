@@ -34,3 +34,8 @@ Route::get('/vehicle/{vehicle_id}/actions', 'ActionController@index')->middlewar
 // Outgoes
 // ------------------------------
 Route::post('/vehicle/{vehicle_id}/outgo', 'OutgoController@store')->middleware('jwt');
+
+// ------------------------------
+// Payments
+// ------------------------------
+Route::post('/vehicle/{vehicle_id}/payment', 'PaymentController@store')->middleware('jwt');

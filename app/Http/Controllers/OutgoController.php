@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Action;
 use App\Outgo;
 use App\OutgoCategory;
 use App\User;
@@ -57,6 +58,8 @@ class OutgoController extends Controller
         $outgo->outgoCategory()->associate($outgoCategory);
 
         $outgo->save();
+
+        return response()->json(null, 200);
     }
 
     /**
@@ -73,6 +76,9 @@ class OutgoController extends Controller
 
         $userInfo = Auth0::jwtUser();
         $user = User::where('auth0id', $userInfo->sub)->first();
+
+        $action = new Action([
+        ]);
 
         $outgo = new Outgo([
             'quantity' => $request->quantity,
@@ -91,6 +97,12 @@ class OutgoController extends Controller
         $outgo->outgoCategory()->associate($outgoCategory);
 
         $outgo->save();
+
+        $action->outgo_id = $outgo->id;
+        $action->vehicle()->associate($vehicle);
+        $action->save();
+
+        return response()->json(null, 200);
     }
 
     /**

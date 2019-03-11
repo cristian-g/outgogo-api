@@ -56,4 +56,12 @@ class Outgo extends Model
     {
         return $this->outgoCategory()->first()->getKeyName();
     }
+
+    /**
+     * Get the related action.
+     */
+    public function action()
+    {
+        return $this->hasOne('App\Action');
+    }
 }

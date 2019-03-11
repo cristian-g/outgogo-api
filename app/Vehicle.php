@@ -30,6 +30,14 @@ class Vehicle extends Model
     ];
 
     /**
+     * Get the actions of this vehicle.
+     */
+    public function actions()
+    {
+        return $this->hasMany('App\Action', 'vehicle_id');
+    }
+
+    /**
      * Get the outgoes of this vehicle.
      */
     public function outgoes()

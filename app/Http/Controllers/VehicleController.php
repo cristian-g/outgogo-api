@@ -6,6 +6,7 @@ use App\User;
 use App\Vehicle;
 use Auth0\Login\Facade\Auth0;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class VehicleController extends Controller
 {
@@ -70,7 +71,30 @@ class VehicleController extends Controller
     public function show($id)
     {
         $vehicle = Vehicle::find($id);
-        $vehicle["actions"] = $vehicle->outgoes()->orderBy('created_at', 'desc')->get()->toArray();
+
+        //$vehicle["actions"] = $vehicle->actions()->orderBy('created_at', 'desc')->get()->toArray();
+
+
+        $vehicle["actions"] = $vehicle
+            ->actions()
+            ->with(['outgo', 'payment'])
+            ->orderBy('created_at', 'desc')
+            //->groupBy(DB::raw("DAY(created_at)"))
+            ->get()
+            ->toArray();
+
+
+        /*DB::table("clicks")
+            ->select("id" ,DB::raw("(COUNT(*)) as total_click"))
+
+            ->orderBy('created_at')
+
+            ->groupBy(DB::raw("MONTH(created_at)"))
+
+            ->get();*/
+
+
+
         return response()->json(['vehicle'=> $vehicle], 200);
     }
 

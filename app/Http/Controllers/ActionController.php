@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Outgo;
 use App\Vehicle;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ActionController extends Controller
 {
@@ -15,9 +16,23 @@ class ActionController extends Controller
      */
     public function index($vehicle_id)
     {
-        $vehicle = Vehicle::find($vehicle_id);
+        //$vehicle = Vehicle::find($vehicle_id);
+        //$outgoes = $vehicle->outgoes()->orderBy('created_at', 'asc')->get();
+        //return response()->json(['actions'=> $outgoes->toArray()], 200);
+
+        /*$vehicle = Vehicle::find($vehicle_id);
         $outgoes = $vehicle->outgoes()->orderBy('created_at', 'asc')->get();
         return response()->json(['actions'=> $outgoes->toArray()], 200);
+
+
+        DB::table("clicks")
+            ->select("id" ,DB::raw("(COUNT(*)) as total_click"))
+
+            ->orderBy('created_at')
+
+            ->groupBy(DB::raw("MONTH(created_at)"))
+
+            ->get();*/
     }
 
     /**
