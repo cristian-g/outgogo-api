@@ -113,7 +113,8 @@ class OutgoController extends Controller
      */
     public function show($id)
     {
-        //
+        $outgo = Outgo::find($id);
+        return response()->json(['outgo'=> $outgo], 200);
     }
 
     /**
@@ -125,7 +126,18 @@ class OutgoController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $outgo = Outgo::find($id);
+
+        $outgo->update([
+            'quantity' => $request->quantity,
+            'description' => $request->description,
+            'notes' => $request->notes,
+            'share_outgo' => $request->share_outgo,
+            'points' => $request->quantity * 100,
+        ]);
+        $outgo->save();
+
+        return response()->json(null, 200);
     }
 
     /**

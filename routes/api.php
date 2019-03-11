@@ -34,8 +34,12 @@ Route::get('/vehicle/{vehicle_id}/actions', 'ActionController@index')->middlewar
 // Outgoes
 // ------------------------------
 Route::post('/vehicle/{vehicle_id}/outgo', 'OutgoController@store')->middleware('jwt');
+Route::get('/outgo/{id}', 'OutgoController@show')->middleware('jwt');
+Route::put('/outgo/{id}', 'OutgoController@update')->middleware('jwt');
 
 // ------------------------------
 // Payments
 // ------------------------------
 Route::post('/vehicle/{vehicle_id}/payment', 'PaymentController@store')->middleware('jwt');
+Route::get('/payment/{id}', 'PaymentController@show')->middleware('jwt');
+Route::put('/payment/{id}', 'PaymentController@update')->middleware('jwt');

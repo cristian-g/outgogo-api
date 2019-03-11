@@ -2,7 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Action;
+use App\Payment;
+use App\User;
+use App\Vehicle;
 use Illuminate\Http\Request;
+use Auth0\Login\Facade\Auth0;
 
 class PaymentController extends Controller
 {
@@ -17,24 +22,37 @@ class PaymentController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, $vehicle_id)
     {
-        //
+        $vehicle = Vehicle::where([
+            "id" => $vehicle_id,
+        ])->first();
+
+        $userInfo = Auth0::jwtUser();
+        $user = User::where('auth0id', $userInfo->sub)->first();
+
+        $action = new Action([
+        ]);
+
+        $payment = new Payment([
+            'quantity' => $request->quantity,
+        ]);
+
+        $payment->vehicle()->associate($vehicle);
+        $payment->user()->associate($user);
+
+        $payment->save();
+
+        $action->payment_id = $payment->id;
+        $action->vehicle()->associate($vehicle);
+        $action->save();
+
+        return response()->json(null, 200);
     }
 
     /**
@@ -45,18 +63,8 @@ class PaymentController extends Controller
      */
     public function show($id)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+        $payment = Payment::find($id);
+        return response()->json(['payment'=> $payment], 200);
     }
 
     /**
@@ -68,7 +76,14 @@ class PaymentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $payment = Payment::find($id);
+
+        $payment->update([
+            'quantity' => $request->quantity,
+        ]);
+        $payment->save();
+
+        return response()->json(null, 200);
     }
 
     /**
