@@ -86,23 +86,10 @@ class VehicleController extends Controller
             ->get()
             ->toArray();
 
-
-
         $matchThese = ['vehicle_id' => $vehicle->id, 'user_id' => $user->id];
         $vehicle["balance"] =
             DB::table('payments')->select(DB::raw('SUM(quantity) AS amount'))->where($matchThese)->get()->first()->amount -
             DB::table('outgoes')->select(DB::raw('SUM(quantity) AS amount'))->where($matchThese)->get()->first()->amount;
-
-
-
-        /*DB::table("clicks")
-            ->select("id" ,DB::raw("(COUNT(*)) as total_click"))
-
-            ->orderBy('created_at')
-
-            ->groupBy(DB::raw("MONTH(created_at)"))
-
-            ->get();*/
 
 
 
