@@ -48,4 +48,4 @@ Route::put('/payment/{id}', 'PaymentController@update')->middleware('jwt');
 // From vehicle
 // ------------------------------
 Route::post('drive', 'OutgoController@storeFromVehicle');
-Route::options('list', 'OutgoController@indexFromVehicle');
+Route::post('list', 'OutgoController@indexFromVehicle');
