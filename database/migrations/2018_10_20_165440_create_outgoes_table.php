@@ -2,6 +2,7 @@
 
 use App\Vehicle;
 use App\Outgo;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -32,6 +33,9 @@ class CreateOutgoesTable extends Migration
 
             $table->string('description');
             $table->unsignedDecimal('quantity', 8, 2);
+
+            $table->float('initial_liters')->nullable()->default(null);
+            $table->timestamp('finished_at')->default(DB::raw('CURRENT_TIMESTAMP'));
 
             $table->string('notes', 500)->default('');
             $table->boolean('share_outgo')->default(true);

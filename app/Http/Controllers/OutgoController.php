@@ -6,6 +6,7 @@ use App\Action;
 use App\Outgo;
 use App\OutgoCategory;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Vehicle;
 use Illuminate\Support\Facades\DB;
@@ -41,25 +42,84 @@ class OutgoController extends Controller
 
         $user = User::find($relation_data->user_id);
 
-        $outgo = new Outgo([
-            'quantity' => $request->quantity,
-            'description' => $request->description,
-            //'notes' => $request->notes, // only add them if filled in request!
-            //'share_outgo' => $request->share_outgo, // only add them if filled in request!
-            //'points' => $request->points, // only add them if filled in request!
-        ]);
-
         $outgoCategory = OutgoCategory::where([
             'key_name' => 'drive'
         ])->first();
 
-        $outgo->vehicle()->associate($vehicle);
-        $outgo->user()->associate($user);
-        $outgo->outgoCategory()->associate($outgoCategory);
+        $lastOutgo = Outgo::where([
+            "vehicle_id" => $vehicle->id,
+            "user_id" => $relation_data->user_id,
+        ])->orderBy('updated_at', 'desc')->first();
+        if ($lastOutgo != null) {
+            $now = Carbon::now();
+            $diffInSeconds = $now->diffInSeconds($lastOutgo->finished_at);
+        }
 
-        $outgo->save();
+        $gasPrice = 1.26;
+
+        if ($lastOutgo == null || $diffInSeconds > 45) {
+
+            $liters = 0;
+            $quantity = $liters * $gasPrice;
+            $description = 'Consumo de ' . $liters . ' litros * ' . $gasPrice . ' €/litro = ' . $quantity . ' €';
+
+            $outgo = new Outgo([
+                'quantity' => $quantity,
+                'description' => $description,
+                'initial_liters' => $request->liters,
+                //'notes' => $request->notes, // only add them if filled in request!
+                //'share_outgo' => $request->share_outgo, // only add them if filled in request!
+                //'points' => $request->points, // only add them if filled in request!
+            ]);
+
+            $outgo->vehicle()->associate($vehicle);
+            $outgo->user()->associate($user);
+            $outgo->outgoCategory()->associate($outgoCategory);
+
+            $outgo->save();
+
+            $action = new Action([
+            ]);
+            $action->outgo_id = $outgo->id;
+            $action->vehicle()->associate($vehicle);
+            $action->save();
+        }
+        else {
+            $liters = $lastOutgo->initial_liters - $request->liters;
+            $quantity = $liters * $gasPrice;
+            $description = 'Consumo de ' . $liters . ' litros * ' . $gasPrice . ' €/litro = ' . $quantity . ' €';
+
+            $lastOutgo->update([
+                'quantity' => $quantity,
+                'description' => $description,
+            ]);
+            $lastOutgo->finished_at = $now;
+            $lastOutgo->save();
+        }
 
         return response()->json(null, 200);
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function indexFromVehicle(Request $request)
+    {
+        $vehicle = Vehicle::where([
+            "private_key" => $request->vehicle_private_key,
+        ])->first();
+
+        $actions = $vehicle
+            ->actions()
+            ->with(['outgo', 'payment'])
+            ->orderBy('created_at', 'desc')
+            ->get()
+            ->toArray();
+
+        return response()->json(['actions'=> $actions], 200);
     }
 
     /**

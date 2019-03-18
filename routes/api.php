@@ -43,3 +43,9 @@ Route::put('/outgo/{id}', 'OutgoController@update')->middleware('jwt');
 Route::post('/vehicle/{vehicle_id}/payment', 'PaymentController@store')->middleware('jwt');
 Route::get('/payment/{id}', 'PaymentController@show')->middleware('jwt');
 Route::put('/payment/{id}', 'PaymentController@update')->middleware('jwt');
+
+// ------------------------------
+// From vehicle
+// ------------------------------
+Route::post('drive', 'OutgoController@storeFromVehicle');
+Route::get('list', 'OutgoController@indexFromVehicle');

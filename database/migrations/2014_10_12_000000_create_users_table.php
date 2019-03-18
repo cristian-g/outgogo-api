@@ -23,13 +23,6 @@ class CreateUsersTable extends Migration
             $table->timestamp('last_tos_acceptance')->useCurrent();
             $table->timestamps();
         });
-        \App\User::create([
-            'name' => 'A',
-            'surnames' => 'A',
-            'email' => 'A',
-            'auth0id' => 'sample_id',
-            'password' => 'A',
-        ]);
     }
 
     /**
