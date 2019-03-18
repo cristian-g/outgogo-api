@@ -30,6 +30,8 @@ class Vehicle extends Model
         'purchase_price',
     ];
 
+    protected $appends = ['sharing_status'];
+
     /**
      * Get the actions of this vehicle.
      */
@@ -52,5 +54,11 @@ class Vehicle extends Model
     public function users()
     {
         return $this->belongsToMany('App\User');
+    }
+
+    public function getSharingStatusAttribute()
+    {
+        //return $this->users()->first()->email;
+        return "example@example.com";
     }
 }
