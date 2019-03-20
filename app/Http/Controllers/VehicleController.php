@@ -52,8 +52,8 @@ class VehicleController extends Controller
 
         // Attach other users
         foreach ($request->emails as $email) {
-            $user = User::where('email', $email)->first();
-            $vehicle->users()->attach($user, [
+            $user_share = User::where('email', $email)->first();
+            $vehicle->users()->attach($user_share, [
                 'public_key' => bin2hex(openssl_random_pseudo_bytes(40)),
                 'is_owner' => false
             ]);
@@ -70,28 +70,14 @@ class VehicleController extends Controller
      */
     public function show($id)
     {
-        $userInfo = Auth0::jwtUser();
-        $user = User::where('auth0id', $userInfo->sub)->first();
-
         $vehicle = Vehicle::find($id);
-
-        //$vehicle["actions"] = $vehicle->actions()->orderBy('created_at', 'desc')->get()->toArray();
-
 
         $vehicle["actions"] = $vehicle
             ->actions()
             ->with(['outgo', 'payment'])
             ->orderBy('created_at', 'desc')
-            //->groupBy(DB::raw("DAY(created_at)"))
             ->get()
             ->toArray();
-
-        $matchThese = ['vehicle_id' => $vehicle->id, 'user_id' => $user->id];
-        $vehicle["balance"] =
-            DB::table('payments')->select(DB::raw('SUM(quantity) AS amount'))->where($matchThese)->get()->first()->amount -
-            DB::table('outgoes')->select(DB::raw('SUM(quantity) AS amount'))->where($matchThese)->get()->first()->amount;
-
-
 
         return response()->json(['vehicle'=> $vehicle], 200);
     }
