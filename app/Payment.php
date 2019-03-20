@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Auth0\Login\Facade\Auth0;
 
 class Payment extends Model
 {
@@ -24,6 +25,10 @@ class Payment extends Model
      */
     protected $fillable = [
         'quantity',
+    ];
+
+    protected $appends = [
+        'am_i_owner',
     ];
 
     /**
@@ -48,5 +53,13 @@ class Payment extends Model
     public function action()
     {
         return $this->hasOne('App\Action');
+    }
+
+    public function getAmIOwnerAttribute()
+    {
+        $userInfo = Auth0::jwtUser();
+        $user = User::where('auth0id', $userInfo->sub)->first();
+
+        return $this->user()->first()->id === $user->id;
     }
 }

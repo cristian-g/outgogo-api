@@ -34,6 +34,7 @@ class Vehicle extends Model
     protected $appends = [
         'sharing_status',
         'balance',
+        'am_i_owner',
     ];
 
     /**
@@ -116,7 +117,6 @@ class Vehicle extends Model
         return $last;
     }
 
-
     public function getBalanceAttribute()
     {
         $userInfo = Auth0::jwtUser();
@@ -128,5 +128,18 @@ class Vehicle extends Model
             DB::table('outgoes')->select(DB::raw('SUM(quantity) AS amount'))->where($matchThese)->get()->first()->amount;
 
         return $balance;
+    }
+
+    public function getAmIOwnerAttribute()
+    {
+        $userInfo = Auth0::jwtUser();
+        $user = User::where('auth0id', $userInfo->sub)->first();
+
+        $relation_data = DB::table('user_vehicle')->where([
+            "vehicle_id" => $this->id,
+            "user_id" => $user->id,
+        ])->first();
+
+        return $relation_data->is_owner;
     }
 }

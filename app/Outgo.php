@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Auth0\Login\Facade\Auth0;
 
 class Outgo extends Model
 {
@@ -26,7 +27,10 @@ class Outgo extends Model
         'description', 'quantity', 'notes', 'share_outgo', 'points', 'initial_liters', 'finished_at'
     ];
 
-    protected $appends = ['category'];
+    protected $appends = [
+        'category',
+        'am_i_owner',
+    ];
 
     /**
      * Get the related vehicle.
@@ -63,5 +67,13 @@ class Outgo extends Model
     public function action()
     {
         return $this->hasOne('App\Action');
+    }
+
+    public function getAmIOwnerAttribute()
+    {
+        $userInfo = Auth0::jwtUser();
+        $user = User::where('auth0id', $userInfo->sub)->first();
+
+        return $this->user()->first()->id === $user->id;
     }
 }
