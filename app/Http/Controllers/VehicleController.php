@@ -74,10 +74,17 @@ class VehicleController extends Controller
 
         $vehicle["actions"] = $vehicle
             ->actions()
-            ->with(['outgo', 'payment'])
+            ->with(['outgo', 'outgo.user', 'payment', 'payment.user', 'payment.receiver'])
             ->orderBy('created_at', 'desc')
             ->get()
             ->toArray();
+
+        $users = $vehicle->users();
+        $user_ids = [];
+        foreach ($users as $aux_user) {
+            $user_ids[] = $aux_user->id;
+        }
+        $vehicle["user_ids"] = $user_ids;
 
         return response()->json(['vehicle'=> $vehicle], 200);
     }

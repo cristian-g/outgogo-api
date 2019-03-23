@@ -48,6 +48,14 @@ class Payment extends Model
     }
 
     /**
+     * Get the related receiver user.
+     */
+    public function receiver()
+    {
+        return $this->belongsTo('App\User', 'receiver_id');
+    }
+
+    /**
      * Get the related action.
      */
     public function action()
