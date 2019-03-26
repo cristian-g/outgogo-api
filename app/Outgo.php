@@ -30,6 +30,7 @@ class Outgo extends Model
     protected $appends = [
         'category',
         'am_i_owner',
+        //'distributions',
     ];
 
     /**
@@ -46,6 +47,30 @@ class Outgo extends Model
     public function user()
     {
         return $this->belongsTo('App\User', 'user_id');
+    }
+
+    /**
+     * Get the original outgo.
+     */
+    public function originalOutgo()
+    {
+        return $this->belongsTo('App\Outgo', 'original_outgo');
+    }
+
+    /**
+     * Get the distributed outgoes of outgo.
+     */
+    public function distributions()
+    {
+        return $this->hasMany('App\Outgo', 'original_outgo');
+    }
+
+    /**
+     * Get the related receiver user.
+     */
+    public function receiver()
+    {
+        return $this->belongsTo('App\User', 'receiver_id');
     }
 
     /**
@@ -76,4 +101,9 @@ class Outgo extends Model
 
         return $this->user()->first()->id === $user->id;
     }
+
+    /*public function getDistributionsAttribute()
+    {
+        return $this->distributions()->with(['user', 'receiver'])->get();
+    }*/
 }

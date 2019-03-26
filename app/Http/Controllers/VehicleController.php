@@ -79,12 +79,31 @@ class VehicleController extends Controller
             ->get()
             ->toArray();
 
-        $users = $vehicle->users();
+        // Identified user
+        $userInfo = Auth0::jwtUser();
+        $user = User::where('auth0id', $userInfo->sub)->first();
+
+        // User ids to make a payment
+        $users = $vehicle->users()->get();
         $user_ids = [];
         foreach ($users as $aux_user) {
-            $user_ids[] = $aux_user->id;
+            if ($aux_user->id === $user->id) continue;
+            $user_ids[] = $aux_user;
         }
         $vehicle["user_ids"] = $user_ids;
+
+        // Balances
+        $balances = [];
+        foreach ($users as $aux_user) {
+            if ($aux_user->id === $user->id) continue;
+            $matchThese = ['vehicle_id' => $vehicle->id, 'user_id' => $user->id, 'receiver_id' => $aux_user->id];
+            $balance =
+                DB::table('payments')->select(DB::raw('SUM(quantity) AS amount'))->where($matchThese)->get()->first()->amount -
+                DB::table('outgoes')->select(DB::raw('SUM(quantity) AS amount'))->where($matchThese)->get()->first()->amount;
+            $aux_user["balance"] = $balance;
+            $balances[] = $aux_user;
+        }
+        $vehicle["balances"] = $balances;
 
         return response()->json(['vehicle'=> $vehicle], 200);
     }

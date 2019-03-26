@@ -142,8 +142,8 @@ class OutgoController extends Controller
 
         $outgo = new Outgo([
             'quantity' => $request->quantity,
-            'description' => $request->description,
-            'notes' => $request->notes,
+            'description' => ($request->description == null) ? "" : $request->description,
+            'notes' => ($request->notes == null) ? "" : $request->notes,
             'share_outgo' => $request->share_outgo,
             'points' => $request->quantity * 100,
         ]);
@@ -158,9 +158,30 @@ class OutgoController extends Controller
 
         $outgo->save();
 
+        $original_outgo = $outgo;
+
         $action->outgo_id = $outgo->id;
         $action->vehicle()->associate($vehicle);
         $action->save();
+
+        // Distribute the outgo to current existing users
+        $users = $vehicle->users()->get();
+        $n_users = sizeof($users);
+        foreach ($users as $aux_user) {
+            $outgo = new Outgo([
+                'quantity' => $request->quantity / $n_users,
+                'description' => ($request->description == null) ? "" : $request->description,
+                'notes' => ($request->notes == null) ? "" : $request->notes,
+                'share_outgo' => $request->share_outgo,
+                'points' => $request->quantity * 100,
+            ]);
+            $outgo->vehicle()->associate($vehicle);
+            $outgo->user()->associate($user);
+            $outgo->receiver()->associate($aux_user);
+            $outgo->originalOutgo()->associate($original_outgo);
+            $outgo->outgoCategory()->associate($outgoCategory);
+            $outgo->save();
+        }
 
         return response()->json(null, 200);
     }
@@ -173,7 +194,12 @@ class OutgoController extends Controller
      */
     public function show($id)
     {
+        $userInfo = Auth0::jwtUser();
+        $user = User::where('auth0id', $userInfo->sub)->first();
+
         $outgo = Outgo::find($id);
+        $distributions = $outgo->distributions()->where('receiver_id', '!=' , DB::raw('user_id'))->with(['user', 'receiver'])->get();
+        $outgo->distributions = $distributions;
         return response()->json(['outgo'=> $outgo], 200);
     }
 
@@ -190,12 +216,21 @@ class OutgoController extends Controller
 
         $outgo->update([
             'quantity' => $request->quantity,
-            'description' => $request->description,
-            'notes' => $request->notes,
+            'description' => ($request->description == null) ? "" : $request->description,
+            'notes' => ($request->notes == null) ? "" : $request->notes,
             'share_outgo' => $request->share_outgo,
             'points' => $request->quantity * 100,
         ]);
         $outgo->save();
+
+        // Update distributions
+        $distributions = $outgo->distributions()->where('receiver_id', '!=' , DB::raw('user_id'))->with(['user', 'receiver'])->get();
+        $n_distributions = sizeof($distributions) + 1;
+        foreach ($distributions as $distribution) {
+            $distribution->update([
+                'quantity' => $request->quantity / $n_distributions,
+            ]);
+        }
 
         return response()->json(null, 200);
     }

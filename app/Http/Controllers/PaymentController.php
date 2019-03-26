@@ -46,6 +46,9 @@ class PaymentController extends Controller
         $payment->vehicle()->associate($vehicle);
         $payment->user()->associate($user);
 
+        $receiver = User::find($request->receiver);
+        $payment->receiver()->associate($receiver);
+
         $payment->save();
 
         $action->payment_id = $payment->id;
@@ -64,6 +67,8 @@ class PaymentController extends Controller
     public function show($id)
     {
         $payment = Payment::find($id);
+        $payment->user = $payment->user()->first();
+        $payment->receiver = $payment->receiver()->first();
         return response()->json(['payment'=> $payment], 200);
     }
 

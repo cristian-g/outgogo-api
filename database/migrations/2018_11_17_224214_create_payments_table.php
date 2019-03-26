@@ -20,9 +20,13 @@ class CreatePaymentsTable extends Migration
             $table->uuid('user_id');
             $table->foreign('user_id')->references('id')->on('users');
 
-            // User
+            // Receiver user
             $table->uuid('receiver_id');
             $table->foreign('receiver_id')->references('id')->on('users');
+
+            // Original payment
+            $table->uuid('original_payment')->nullable();
+            $table->foreign('original_payment')->references('id')->on('payments');
 
             // Vehicle
             $table->uuid('vehicle_id');

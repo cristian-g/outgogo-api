@@ -56,6 +56,14 @@ class Payment extends Model
     }
 
     /**
+     * Get the original payment.
+     */
+    public function originalPayment()
+    {
+        return $this->belongsTo('App\Payment', 'original_payment');
+    }
+
+    /**
      * Get the related action.
      */
     public function action()

@@ -23,9 +23,17 @@ class CreateOutgoesTable extends Migration
             $table->uuid('user_id');
             $table->foreign('user_id')->references('id')->on('users');
 
+            // Receiver user
+            $table->uuid('receiver_id')->nullable();
+            $table->foreign('receiver_id')->references('id')->on('users');
+
             // Vehicle
             $table->uuid('vehicle_id');
             $table->foreign('vehicle_id')->references('id')->on('vehicles');
+
+            // Original outgo
+            $table->uuid('original_outgo')->nullable();
+            $table->foreign('original_outgo')->references('id')->on('outgoes');
 
             // Outgo category
             $table->uuid('outgo_category_id');
