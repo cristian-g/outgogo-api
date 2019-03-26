@@ -141,11 +141,11 @@ class OutgoController extends Controller
         ]);
 
         $outgo = new Outgo([
-            'quantity' => $request->quantity,
+            'quantity' => (abs($request->quantity) * (-1)),
             'description' => ($request->description == null) ? "" : $request->description,
             'notes' => ($request->notes == null) ? "" : $request->notes,
             'share_outgo' => $request->share_outgo,
-            'points' => $request->quantity * 100,
+            'points' => abs($request->quantity) * 100,
         ]);
 
         $outgoCategory = OutgoCategory::where([
@@ -169,11 +169,11 @@ class OutgoController extends Controller
         $n_users = sizeof($users);
         foreach ($users as $aux_user) {
             $outgo = new Outgo([
-                'quantity' => $request->quantity / $n_users,
+                'quantity' => (abs($request->quantity) * (-1)) / $n_users,
                 'description' => ($request->description == null) ? "" : $request->description,
                 'notes' => ($request->notes == null) ? "" : $request->notes,
                 'share_outgo' => $request->share_outgo,
-                'points' => $request->quantity * 100,
+                'points' => abs($request->quantity) * 100,
             ]);
             $outgo->vehicle()->associate($vehicle);
             $outgo->user()->associate($user);
@@ -215,11 +215,11 @@ class OutgoController extends Controller
         $outgo = Outgo::find($id);
 
         $outgo->update([
-            'quantity' => $request->quantity,
+            'quantity' => (abs($request->quantity) * (-1)),
             'description' => ($request->description == null) ? "" : $request->description,
             'notes' => ($request->notes == null) ? "" : $request->notes,
             'share_outgo' => $request->share_outgo,
-            'points' => $request->quantity * 100,
+            'points' => abs($request->quantity) * 100,
         ]);
         $outgo->save();
 
@@ -228,7 +228,7 @@ class OutgoController extends Controller
         $n_distributions = sizeof($distributions) + 1;
         foreach ($distributions as $distribution) {
             $distribution->update([
-                'quantity' => $request->quantity / $n_distributions,
+                'quantity' => (abs($request->quantity) * (-1)) / $n_distributions,
             ]);
         }
 

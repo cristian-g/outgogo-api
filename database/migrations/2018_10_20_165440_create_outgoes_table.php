@@ -40,7 +40,7 @@ class CreateOutgoesTable extends Migration
             $table->foreign('outgo_category_id')->references('id')->on('outgo_categories');
 
             $table->string('description');
-            $table->unsignedDecimal('quantity', 8, 2);
+            $table->decimal('quantity', 8, 2);
 
             $table->float('initial_liters')->nullable()->default(null);
             $table->timestamp('finished_at')->default(DB::raw('CURRENT_TIMESTAMP'));
