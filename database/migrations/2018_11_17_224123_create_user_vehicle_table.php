@@ -33,35 +33,35 @@ class CreateUserVehicleTable extends Migration
         $user1 = \App\User::create([
             'name' => 'Àngela',
             'surnames' => 'Brunet',
-            'email' => 'angela.brunet@pentech.io',
+            'email' => 'angela.brunet@gmail.com',
             'auth0id' => 'sample_id1',
             'password' => null,
         ]);
         $user2 = \App\User::create([
             'name' => 'Albert',
             'surnames' => 'Martínez',
-            'email' => 'albert.martinez@pentech.io',
+            'email' => 'albert.martinez@gmail.com',
             'auth0id' => 'sample_id2',
             'password' => null,
         ]);
         $user3 = \App\User::create([
             'name' => 'Marc',
             'surnames' => 'Segura',
-            'email' => 'marc.segura@pentech.io',
+            'email' => 'marc.segura@gmail.com',
             'auth0id' => 'sample_id3',
             'password' => null,
         ]);
         $user4 = \App\User::create([
             'name' => 'Pol',
             'surnames' => 'Vales',
-            'email' => 'pol.vales@pentech.io',
+            'email' => 'pol.vales@gmail.com',
             'auth0id' => 'sample_id4',
             'password' => null,
         ]);
         $user5 = \App\User::create([
             'name' => 'Cristian',
             'surnames' => 'González',
-            'email' => 'cristian.gonzalez@pentech.io',
+            'email' => 'cristian.gonzalez@gmail.com',
             'auth0id' => 'sample_id5',
             'password' => null,
         ]);
