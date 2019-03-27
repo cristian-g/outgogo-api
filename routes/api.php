@@ -55,3 +55,11 @@ Route::post('list', 'OutgoController@indexFromVehicle');
 // ------------------------------
 Route::get('/fake1', 'VehicleController@fake1');
 Route::get('/fake2', 'VehicleController@fake2');
+
+// Reset database
+Route::get('reset-database', function (Request $request) {
+    //return shell_exec('php artisan migrate:rollback') . shell_exec('php artisan migrate');
+    \Illuminate\Support\Facades\Artisan::call('migrate:rollback');
+    \Illuminate\Support\Facades\Artisan::call('migrate');
+    return "Yey! Data has been reset. Go back to your tests, little grasshopper!";
+});
