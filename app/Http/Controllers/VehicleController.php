@@ -210,4 +210,70 @@ class VehicleController extends Controller
 
         return response()->json(['success' => true], 200);
     }
+
+    /**
+     * Fake 2
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function fake2()
+    {
+        $user = User::where('email', 'pol.vales@gmail.com')->first();
+        $vehicle = $user->vehicles()->first();
+
+        $gasPrice = 1.26;
+
+        $liters = 50;
+        $quantity = $liters * $gasPrice;
+        $description = 'Ha puesto ' . $liters . ' litros * ' . $gasPrice . ' €/litro = ' . $quantity . ' €';
+
+        $outgo = new Outgo([
+            'quantity' => $quantity * (-1),
+            'description' => $description,
+            'initial_liters' => 0,
+            //'notes' => $request->notes, // only add them if filled in request!
+            //'share_outgo' => $request->share_outgo, // only add them if filled in request!
+            //'points' => $request->points, // only add them if filled in request!
+        ]);
+
+        $outgoCategory = OutgoCategory::where([
+            'key_name' => 'drive'
+        ])->first();
+
+        $outgo->vehicle()->associate($vehicle);
+        $outgo->user()->associate($user);
+        $outgo->outgoCategory()->associate($outgoCategory);
+
+        $outgo->save();
+
+        $original_outgo = $outgo;
+
+        $action = new Action([
+        ]);
+
+        $action->outgo_id = $outgo->id;
+        $action->vehicle()->associate($vehicle);
+        $action->save();
+
+        // Distribute the outgo to current existing users
+        $users = $vehicle->users()->get();
+        $n_users = sizeof($users);
+        foreach ($users as $aux_user) {
+            $outgo = new Outgo([
+                'quantity' => ($quantity * (-1)) / $n_users,
+                'description' => ($description == null) ? "" : $description,
+                'notes' => "",
+                'share_outgo' => true,
+                'points' => abs($quantity) * 100,
+            ]);
+            $outgo->vehicle()->associate($vehicle);
+            $outgo->user()->associate($user);
+            $outgo->receiver()->associate($aux_user);
+            $outgo->originalOutgo()->associate($original_outgo);
+            $outgo->outgoCategory()->associate($outgoCategory);
+            $outgo->save();
+        }
+
+        return response()->json(['success' => true], 200);
+    }
 }
