@@ -66,7 +66,7 @@ class CreateUserVehicleTable extends Migration
             'password' => null,
         ]);
         $first_vehicle = \App\Vehicle::first();
-        $first_vehicle->users()->attach($user1, [
+        /*$first_vehicle->users()->attach($user1, [
             'public_key' => 1,
             'is_owner' => true,
         ]);
@@ -85,7 +85,7 @@ class CreateUserVehicleTable extends Migration
         $first_vehicle->users()->attach($user5, [
             'public_key' => 5,
             'is_owner' => false,
-        ]);
+        ]);*/
     }
 
     /**

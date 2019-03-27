@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Action;
+use App\Outgo;
+use App\OutgoCategory;
 use App\User;
 use App\Vehicle;
 use Auth0\Login\Facade\Auth0;
@@ -20,13 +23,13 @@ class VehicleController extends Controller
         $userInfo = Auth0::jwtUser();
         $user = User::where('auth0id', $userInfo->sub)->first();
         $vehicles = $user->vehicles()->orderBy('created_at', 'desc')->get();
-        return response()->json(['vehicles'=> $vehicles->toArray()], 200);
+        return response()->json(['vehicles' => $vehicles->toArray()], 200);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -65,7 +68,7 @@ class VehicleController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -97,22 +100,24 @@ class VehicleController extends Controller
         foreach ($users as $aux_user) {
             if ($aux_user->id === $user->id) continue;
             $matchThese = ['vehicle_id' => $vehicle->id, 'user_id' => $user->id, 'receiver_id' => $aux_user->id];
+            $matchThese2 = ['vehicle_id' => $vehicle->id, 'user_id' => $aux_user->id, 'receiver_id' => $user->id];
             $balance =
                 DB::table('payments')->select(DB::raw('SUM(quantity) AS amount'))->where($matchThese)->get()->first()->amount -
-                DB::table('outgoes')->select(DB::raw('SUM(quantity) AS amount'))->where($matchThese)->get()->first()->amount;
+                DB::table('outgoes')->select(DB::raw('SUM(quantity) AS amount'))->where($matchThese)->get()->first()->amount +
+                DB::table('outgoes')->select(DB::raw('SUM(quantity) AS amount'))->where($matchThese2)->get()->first()->amount;
             $aux_user["balance"] = $balance;
             $balances[] = $aux_user;
         }
         $vehicle["balances"] = $balances;
 
-        return response()->json(['vehicle'=> $vehicle], 200);
+        return response()->json(['vehicle' => $vehicle], 200);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -141,13 +146,68 @@ class VehicleController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Fake 1
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function fake1()
     {
-        //
+        $user = User::where('email', 'angela.brunet@gmail.com')->first();
+        $vehicle = $user->vehicles()->first();
+
+        $gasPrice = 1.26;
+
+        $liters = 2.4;
+        $quantity = $liters * $gasPrice;
+        $description = 'Consumo de ' . $liters . ' litros * ' . $gasPrice . ' €/litro = ' . $quantity . ' €';
+
+        $outgo = new Outgo([
+            'quantity' => $quantity,
+            'description' => $description,
+            'initial_liters' => 20.2,
+            //'notes' => $request->notes, // only add them if filled in request!
+            //'share_outgo' => $request->share_outgo, // only add them if filled in request!
+            //'points' => $request->points, // only add them if filled in request!
+        ]);
+
+        $outgoCategory = OutgoCategory::where([
+            'key_name' => 'drive'
+        ])->first();
+
+        $outgo->vehicle()->associate($vehicle);
+        $outgo->user()->associate($user);
+        $outgo->outgoCategory()->associate($outgoCategory);
+
+        $outgo->save();
+
+        $original_outgo = $outgo;
+
+        $action = new Action([
+        ]);
+
+        $action->outgo_id = $outgo->id;
+        $action->vehicle()->associate($vehicle);
+        $action->save();
+
+        // Distribute the outgo to current existing users
+        $users = $vehicle->users()->get();
+        $n_users = sizeof($users);
+        foreach ($users as $aux_user) {
+            $outgo = new Outgo([
+                'quantity' => (abs($quantity)) / $n_users,
+                'description' => ($description == null) ? "" : $description,
+                'notes' => "",
+                'share_outgo' => true,
+                'points' => abs($quantity) * 100,
+            ]);
+            $outgo->vehicle()->associate($vehicle);
+            $outgo->user()->associate($user);
+            $outgo->receiver()->associate($aux_user);
+            $outgo->originalOutgo()->associate($original_outgo);
+            $outgo->outgoCategory()->associate($outgoCategory);
+            $outgo->save();
+        }
+
+        return response()->json(['success' => true], 200);
     }
 }
