@@ -30,13 +30,13 @@ class CreateUserVehicleTable extends Migration
 
             $table->timestamps();
         });
-        $user1 = \App\User::create([
+        /*$user1 = \App\User::create([
             'name' => 'Àngela',
             'surnames' => 'Brunet',
             'email' => 'usuario2test@cristiangonzalez.com',
             'auth0id' => 'sample_id1',
             'password' => null,
-        ]);
+        ]);*/
         $user2 = \App\User::create([
             'name' => 'Albert',
             'surnames' => 'Martínez',
@@ -51,13 +51,13 @@ class CreateUserVehicleTable extends Migration
             'auth0id' => 'sample_id3',
             'password' => null,
         ]);
-        $user4 = \App\User::create([
+        /*$user4 = \App\User::create([
             'name' => 'Pol',
             'surnames' => 'Vales',
             'email' => 'usuario3test@cristiangonzalez.com',
             'auth0id' => 'sample_id4',
             'password' => null,
-        ]);
+        ]);*/
         $user5 = \App\User::create([
             'name' => 'Cristian',
             'surnames' => 'González',
