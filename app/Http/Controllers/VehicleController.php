@@ -57,6 +57,11 @@ class VehicleController extends Controller
         // Attach other users
         foreach ($request->emails as $email) {
             $user_share = User::where('email', $email)->first();
+            if ($user_share == null) {
+                $vehicle->users()->detach();
+                $vehicle->delete();
+                throw new \Exception();
+            }
             $vehicle->users()->attach($user_share, [
                 'public_key' => bin2hex(openssl_random_pseudo_bytes(40)),
                 'is_owner' => false
