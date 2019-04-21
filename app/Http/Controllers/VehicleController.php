@@ -415,7 +415,7 @@ class VehicleController extends Controller
     public function signup2()
     {
         $user4 = \App\User::create([
-            'name' => 'Usuario 1',
+            'name' => 'Usuario 3',
             'surnames' => '',
             'email' => 'usuario3test@cristiangonzalez.com',
             'auth0id' => 'usuario3test',

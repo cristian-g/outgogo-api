@@ -53,7 +53,7 @@ Route::post('list', 'OutgoController@indexFromVehicle');
 // ------------------------------
 // Fake
 // ------------------------------
-Route::get('/fake1', 'VehicleController@fake0');
+Route::get('/fake0', 'VehicleController@fake0');
 Route::get('/fake1', 'VehicleController@fake1');
 Route::get('/fake2', 'VehicleController@fake2');
 Route::get('/fake2', 'VehicleController@fake3');
