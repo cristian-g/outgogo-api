@@ -53,8 +53,12 @@ Route::post('list', 'OutgoController@indexFromVehicle');
 // ------------------------------
 // Fake
 // ------------------------------
+Route::get('/fake1', 'VehicleController@fake0');
 Route::get('/fake1', 'VehicleController@fake1');
 Route::get('/fake2', 'VehicleController@fake2');
+Route::get('/fake2', 'VehicleController@fake3');
+Route::get('/signup1', 'VehicleController@signup1');
+Route::get('/signup2', 'VehicleController@signup2');
 
 // Reset database
 Route::get('reset-database', function (Request $request) {

@@ -384,4 +384,38 @@ class VehicleController extends Controller
 
         return response()->json(['success' => true], 200);
     }
+
+    /**
+     * Sign up 1
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function signup1()
+    {
+        $user1 = \App\User::create([
+            'name' => 'Usuario 2',
+            'surnames' => '',
+            'email' => 'usuario2test@cristiangonzalez.com',
+            'auth0id' => 'usuario2test',
+            'password' => null,
+        ]);
+        return response()->json(['success' => true], 200);
+    }
+
+    /**
+     * Sign up 2
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function signup2()
+    {
+        $user4 = \App\User::create([
+            'name' => 'Usuario 1',
+            'surnames' => '',
+            'email' => 'usuario3test@cristiangonzalez.com',
+            'auth0id' => 'usuario3test',
+            'password' => null,
+        ]);
+        return response()->json(['success' => true], 200);
+    }
 }
