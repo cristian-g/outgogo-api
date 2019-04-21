@@ -6,6 +6,7 @@ use App\Action;
 use App\Outgo;
 use App\OutgoCategory;
 use App\User;
+use App\Payment;
 use App\Vehicle;
 use Auth0\Login\Facade\Auth0;
 use Illuminate\Http\Request;
@@ -146,6 +147,72 @@ class VehicleController extends Controller
     }
 
     /**
+     * Fake 0
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function fake0()
+    {
+        $user = User::where('email', 'usuario1test@cristiangonzalez.com')->first();
+        $vehicle = $user->vehicles()->first();
+
+        $gasPrice = 1.26;
+
+        $liters = 5.2;
+        $quantity = $liters * $gasPrice;
+        $description = 'Consumo de ' . $liters . ' litros * ' . $gasPrice . ' €/litro = ' . $quantity . ' €';
+
+        $outgo = new Outgo([
+            'quantity' => $quantity,
+            'description' => $description,
+            'initial_liters' => 19.4,
+            //'notes' => $request->notes, // only add them if filled in request!
+            //'share_outgo' => $request->share_outgo, // only add them if filled in request!
+            //'points' => $request->points, // only add them if filled in request!
+        ]);
+
+        $outgoCategory = OutgoCategory::where([
+            'key_name' => 'drive'
+        ])->first();
+
+        $outgo->vehicle()->associate($vehicle);
+        $outgo->user()->associate($user);
+        $outgo->outgoCategory()->associate($outgoCategory);
+
+        $outgo->save();
+
+        $original_outgo = $outgo;
+
+        $action = new Action([
+        ]);
+
+        $action->outgo_id = $outgo->id;
+        $action->vehicle()->associate($vehicle);
+        $action->save();
+
+        // Distribute the outgo to current existing users
+        $users = $vehicle->users()->get();
+        $n_users = sizeof($users);
+        foreach ($users as $aux_user) {
+            $outgo = new Outgo([
+                'quantity' => (abs($quantity)) / $n_users,
+                'description' => ($description == null) ? "" : $description,
+                'notes' => "",
+                'share_outgo' => true,
+                'points' => abs($quantity) * 100,
+            ]);
+            $outgo->vehicle()->associate($vehicle);
+            $outgo->user()->associate($user);
+            $outgo->receiver()->associate($aux_user);
+            $outgo->originalOutgo()->associate($original_outgo);
+            $outgo->outgoCategory()->associate($outgoCategory);
+            $outgo->save();
+        }
+
+        return response()->json(['success' => true], 200);
+    }
+
+    /**
      * Fake 1
      *
      * @return \Illuminate\Http\Response
@@ -157,14 +224,14 @@ class VehicleController extends Controller
 
         $gasPrice = 1.26;
 
-        $liters = 2.4;
+        $liters = 3.9;
         $quantity = $liters * $gasPrice;
         $description = 'Consumo de ' . $liters . ' litros * ' . $gasPrice . ' €/litro = ' . $quantity . ' €';
 
         $outgo = new Outgo([
             'quantity' => $quantity,
             'description' => $description,
-            'initial_liters' => 20.2,
+            'initial_liters' => 8.1,
             //'notes' => $request->notes, // only add them if filled in request!
             //'share_outgo' => $request->share_outgo, // only add them if filled in request!
             //'points' => $request->points, // only add them if filled in request!
@@ -273,6 +340,47 @@ class VehicleController extends Controller
             $outgo->outgoCategory()->associate($outgoCategory);
             $outgo->save();
         }
+
+        return response()->json(['success' => true], 200);
+    }
+
+    /**
+     * Fake 3
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function fake3()
+    {
+        $user = User::where('email', 'usuario3test@cristiangonzalez.com')->first();
+        $vehicle = $user->vehicles()->first();
+        $vehicle_id = $vehicle->id;
+
+        $payment_quantity = 10.0;
+
+        $receiver = User::where('email', 'usuario1test@cristiangonzalez.com')->first();
+
+        $vehicle = Vehicle::where([
+            "id" => $vehicle_id,
+        ])->first();
+
+
+        $action = new Action([
+        ]);
+
+        $payment = new Payment([
+            'quantity' => $payment_quantity,
+        ]);
+
+        $payment->vehicle()->associate($vehicle);
+        $payment->user()->associate($user);
+
+        $payment->receiver()->associate($receiver);
+
+        $payment->save();
+
+        $action->payment_id = $payment->id;
+        $action->vehicle()->associate($vehicle);
+        $action->save();
 
         return response()->json(['success' => true], 200);
     }
