@@ -110,7 +110,8 @@ class VehicleController extends Controller
             $balance =
                 DB::table('payments')->select(DB::raw('SUM(quantity) AS amount'))->where($matchThese)->get()->first()->amount -
                 DB::table('outgoes')->select(DB::raw('SUM(quantity) AS amount'))->where($matchThese)->get()->first()->amount +
-                DB::table('outgoes')->select(DB::raw('SUM(quantity) AS amount'))->where($matchThese2)->get()->first()->amount;
+                DB::table('outgoes')->select(DB::raw('SUM(quantity) AS amount'))->where($matchThese2)->get()->first()->amount -
+                DB::table('payments')->select(DB::raw('SUM(quantity) AS amount'))->where($matchThese2)->get()->first()->amount;
             $aux_user["balance"] = $balance;
             $balances[] = $aux_user;
         }
