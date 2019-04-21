@@ -152,7 +152,7 @@ class VehicleController extends Controller
      */
     public function fake1()
     {
-        $user = User::where('email', 'angela.brunet@gmail.com')->first();
+        $user = User::where('email', 'usuario2test@cristiangonzalez.com')->first();
         $vehicle = $user->vehicles()->first();
 
         $gasPrice = 1.26;
@@ -218,7 +218,7 @@ class VehicleController extends Controller
      */
     public function fake2()
     {
-        $user = User::where('email', 'pol.vales@gmail.com')->first();
+        $user = User::where('email', 'usuario3test@cristiangonzalez.com')->first();
         $vehicle = $user->vehicles()->first();
 
         $gasPrice = 1.26;

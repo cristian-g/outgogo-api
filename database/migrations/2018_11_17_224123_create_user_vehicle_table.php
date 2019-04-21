@@ -33,7 +33,7 @@ class CreateUserVehicleTable extends Migration
         $user1 = \App\User::create([
             'name' => 'Àngela',
             'surnames' => 'Brunet',
-            'email' => 'angela.brunet@gmail.com',
+            'email' => 'usuario2test@cristiangonzalez.com',
             'auth0id' => 'sample_id1',
             'password' => null,
         ]);
@@ -54,7 +54,7 @@ class CreateUserVehicleTable extends Migration
         $user4 = \App\User::create([
             'name' => 'Pol',
             'surnames' => 'Vales',
-            'email' => 'pol.vales@gmail.com',
+            'email' => 'usuario3test@cristiangonzalez.com',
             'auth0id' => 'sample_id4',
             'password' => null,
         ]);
