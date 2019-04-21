@@ -296,8 +296,8 @@ class VehicleController extends Controller
         $gasPrice = 1.26;
 
         $liters = 50;
-        $quantity = $liters * $gasPrice;
-        $description = 'Ha puesto ' . $liters . ' litros * ' . $gasPrice . ' €/litro = ' . $quantity . ' €';
+        $quantity = 900.0;
+        $description = 'Reparación ventanillas';
 
         $outgo = new Outgo([
             'quantity' => $quantity * (-1),
@@ -356,11 +356,11 @@ class VehicleController extends Controller
      */
     public function fake3()
     {
-        $user = User::where('email', 'usuario3test@cristiangonzalez.com')->first();
+        $user = User::where('email', 'usuario2test@cristiangonzalez.com')->first();
         $vehicle = $user->vehicles()->first();
         $vehicle_id = $vehicle->id;
 
-        $payment_quantity = 10.0;
+        $payment_quantity = 100.0;
 
         $receiver = User::where('email', 'usuario1test@cristiangonzalez.com')->first();
 
