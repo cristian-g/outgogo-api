@@ -23,7 +23,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::get('/vehicles', 'VehicleController@index')->middleware('jwt');
 Route::get('/vehicle/{id}', 'VehicleController@show')->middleware('jwt');
 Route::put('/vehicle/{id}', 'VehicleController@update')->middleware('jwt');
-Route::post('/vehicle', 'VehicleController@store')->middleware('jwt');//->middleware('check.scope:read:email');
+Route::post('/vehicle', 'VehicleController@store')->middleware('jwt');
+Route::get('/vehicle/{id}/user/{user_id}', 'VehicleController@show_balance')->middleware('jwt');
 
 // ------------------------------
 // Actions

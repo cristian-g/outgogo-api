@@ -120,6 +120,68 @@ class VehicleController extends Controller
         return response()->json(['vehicle' => $vehicle], 200);
     }
 
+    public function show_balance($id, $user_id)
+    {
+        $vehicle = Vehicle::find($id);
+
+        // Identified user
+        $userInfo = Auth0::jwtUser();
+        $user = User::where('auth0id', $userInfo->sub)->first();
+
+        // Desired user
+        $aux_user = User::find($user_id);
+
+        // Rules
+        $matchThese = ['vehicle_id' => $vehicle->id, 'user_id' => $user->id, 'receiver_id' => $aux_user->id];
+        $matchThese2 = ['vehicle_id' => $vehicle->id, 'user_id' => $aux_user->id, 'receiver_id' => $user->id];
+
+        // Array to return
+        $actions = [];
+
+        // Balances
+        $payments1 = Payment::where($matchThese)->get()->toArray();
+        $payments2 = Payment::where($matchThese2)->get()->toArray();
+        $outgoes1 = Outgo::where($matchThese)->get()->toArray();
+        $outgoes2 = Outgo::where($matchThese2)->get()->toArray();
+
+        // Label as poitive or negative
+        foreach ($payments1 as $key => $payment) $payments1[$key]["positive"] = true;
+        foreach ($payments2 as $key => $payment) $payments2[$key]["positive"] = false;
+        foreach ($outgoes1 as $key => $outgo) $outgoes1[$key]["positive"] = false;
+        foreach ($outgoes2 as $key => $outgo) $outgoes2[$key]["positive"] = true;
+
+        // Push to array
+        $actions += $payments1;
+        $actions += $payments2;
+        $actions += $outgoes1;
+        $actions += $outgoes2;
+
+        // Sort array
+        /*usort($actions, function ($item1, $item2) {
+            return strtotime($item1['created_at']) - strtotime($item2['created_at']);
+        });*/
+
+        $array = $actions;
+        foreach ($array as $key => $node) {
+            $timestamps[$key]    = $node["created_at"];
+        }
+        array_multisort($timestamps, SORT_ASC, $array);
+        $actions = $array;
+
+        // Compute total
+        $total =
+            DB::table('payments')->select(DB::raw('SUM(quantity) AS amount'))->where($matchThese)->get()->first()->amount -
+            DB::table('outgoes')->select(DB::raw('SUM(quantity) AS amount'))->where($matchThese)->get()->first()->amount +
+            DB::table('outgoes')->select(DB::raw('SUM(quantity) AS amount'))->where($matchThese2)->get()->first()->amount -
+            DB::table('payments')->select(DB::raw('SUM(quantity) AS amount'))->where($matchThese2)->get()->first()->amount;
+
+        return response()->json([
+            'actions' => $actions,
+            'total' => $total,
+            'user' => $aux_user
+        ], 200);
+    }
+
     /**
      * Update the specified resource in storage.
      *
