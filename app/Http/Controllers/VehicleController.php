@@ -151,23 +151,19 @@ class VehicleController extends Controller
         foreach ($outgoes2 as $key => $outgo) $outgoes2[$key]["positive"] = true;
 
         // Push to array
-        $actions += $payments1;
-        $actions += $payments2;
-        $actions += $outgoes1;
-        $actions += $outgoes2;
+        foreach ($payments1 as $key => $payment) array_push($actions, $payment);
+        foreach ($payments2 as $key => $payment) array_push($actions, $payment);
+        foreach ($outgoes1 as $key => $outgo) array_push($actions, $outgo);
+        foreach ($outgoes2 as $key => $outgo) array_push($actions, $outgo);
 
         // Sort array
-        /*usort($actions, function ($item1, $item2) {
-            return strtotime($item1['created_at']) - strtotime($item2['created_at']);
-        });*/
-
         $array = $actions;
         foreach ($array as $key => $node) {
             $timestamps[$key]    = $node["created_at"];
         }
-        array_multisort($timestamps, SORT_ASC, $array);
+        array_multisort($timestamps, SORT_DESC, $array);
         $actions = $array;
-
+        
         // Compute total
         $total =
             DB::table('payments')->select(DB::raw('SUM(quantity) AS amount'))->where($matchThese)->get()->first()->amount -
