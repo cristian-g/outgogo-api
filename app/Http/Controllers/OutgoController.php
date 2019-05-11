@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use App\Vehicle;
 use Illuminate\Support\Facades\DB;
 use Auth0\Login\Facade\Auth0;
+use Illuminate\Support\Facades\Validator;
 
 class OutgoController extends Controller
 {
@@ -136,6 +137,28 @@ class OutgoController extends Controller
 
         $userInfo = Auth0::jwtUser();
         $user = User::where('auth0id', $userInfo->sub)->first();
+
+        // Validation
+        $validation = Validator::make(
+            array(
+                'cantidad' => $request->quantity,
+                'descripción' => $request->description,
+            ),
+            array(
+                'cantidad' => array('required', 'numeric'),
+                'descripción' => array('required'),
+            )
+        );
+        if ($validation->fails() ) {
+            $array = (array_values((array) $validation->messages()->toArray()));
+            $array2 = [];
+            foreach ($array as $element) {
+                foreach ($element as $element2) {
+                    array_push($array2, $element2);
+                }
+            }
+            return response()->json(['errors' => $array2], 500);
+        }
 
         $action = new Action([
         ]);

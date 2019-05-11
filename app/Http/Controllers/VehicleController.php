@@ -11,6 +11,7 @@ use App\Vehicle;
 use Auth0\Login\Facade\Auth0;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class VehicleController extends Controller
 {
@@ -37,6 +38,35 @@ class VehicleController extends Controller
     {
         $userInfo = Auth0::jwtUser();
         $owner = User::where('auth0id', $userInfo->sub)->first();
+
+        // Validation
+        $validation = Validator::make(
+            array(
+                'marca' => $request->brand,
+                'modelo' => $request->model,
+                'año de compra' => $request->year,
+                'importe de compra' => $request->price,
+                'clave' => $request->key,
+            ),
+            array(
+                'marca' => array('required'),
+                'modelo' => array('required'),
+                'año de compra' => array('required', 'numeric'),
+                'importe de compra' => array('required', 'numeric'),
+                'clave' => array('required'),
+            )
+        );
+        if ($validation->fails() ) {
+            $array = (array_values((array) $validation->messages()->toArray()));
+            $array2 = [];
+            foreach ($array as $element) {
+                foreach ($element as $element2) {
+                    array_push($array2, $element2);
+                }
+            }
+            return response()->json(['errors' => $array2], 500);
+        }
+
         $bytes = 40;
         $vehicle = new Vehicle([
             'brand' => $request->brand,
@@ -163,7 +193,7 @@ class VehicleController extends Controller
         }
         array_multisort($timestamps, SORT_DESC, $array);
         $actions = $array;
-        
+
         // Compute total
         $total =
             DB::table('payments')->select(DB::raw('SUM(quantity) AS amount'))->where($matchThese)->get()->first()->amount -
