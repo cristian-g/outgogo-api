@@ -35,6 +35,7 @@ class Vehicle extends Model
         'sharing_status',
         'balance',
         'am_i_owner',
+        'emails',
     ];
 
     /**
@@ -141,5 +142,24 @@ class Vehicle extends Model
         ])->first();
 
         return $relation_data->is_owner;
+    }
+
+    public function getEmailsAttribute()
+    {
+        // Compute existing users (already attached)
+        $user_emails = [];
+        $users = $this->users()->get();
+        foreach ($users as $aux_user) {
+            // Only add it if it is NOT the owner
+            $relation_data = DB::table('user_vehicle')->where([
+                "vehicle_id" => $this->id,
+                "user_id" => $aux_user->id,
+            ])->first();
+            if ($relation_data->is_owner === 0) {
+                $user_emails[] = $aux_user->email;
+            }
+        }
+
+        return $user_emails;
     }
 }

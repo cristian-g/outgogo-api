@@ -60,6 +60,7 @@ Route::get('/fake2', 'VehicleController@fake2');
 Route::get('/fake3', 'VehicleController@fake3');
 Route::get('/signup1', 'VehicleController@signup1');
 Route::get('/signup2', 'VehicleController@signup2');
+Route::get('/signup3', 'VehicleController@signup3');
 
 // Reset database
 Route::get('reset-database', function (Request $request) {

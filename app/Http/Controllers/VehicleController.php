@@ -230,13 +230,24 @@ class VehicleController extends Controller
         ]);
         $vehicle->save();
 
+        // Compute existing users (already attached)
+        $user_ids = [];
+        $users = $vehicle->users()->get();
+        foreach ($users as $aux_user) {
+            $user_ids[] = $aux_user->id;
+        }
+
         // Attach other users
         foreach ($request->emails as $email) {
             $user = User::where('email', $email)->first();
-            $vehicle->users()->attach($user, [
-                'public_key' => bin2hex(openssl_random_pseudo_bytes(40)),
-                'is_owner' => false
-            ]);
+
+            // Only attach it if it is not already attached
+            if (!in_array($user->id, $user_ids)) {
+                $vehicle->users()->attach($user, [
+                    'public_key' => bin2hex(openssl_random_pseudo_bytes(40)),
+                    'is_owner' => false
+                ]);
+            }
         }
     }
 
@@ -508,6 +519,23 @@ class VehicleController extends Controller
             'surnames' => '',
             'email' => 'usuario3test@cristiangonzalez.com',
             'auth0id' => 'usuario3test',
+            'password' => null,
+        ]);
+        return response()->json(['success' => true], 200);
+    }
+
+    /**
+     * Sign up 3
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function signup3()
+    {
+        $user4 = \App\User::create([
+            'name' => 'Usuario 4',
+            'surnames' => '',
+            'email' => 'usuario4test@cristiangonzalez.com',
+            'auth0id' => 'usuario4test',
             'password' => null,
         ]);
         return response()->json(['success' => true], 200);
