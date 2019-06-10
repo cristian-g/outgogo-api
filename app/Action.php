@@ -18,6 +18,15 @@ class Action extends Model
     protected $table = 'actions';
 
     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'created_at',
+    ];
+
+    /**
      * Get the related vehicle.
      */
     public function vehicle()

@@ -25,6 +25,7 @@ class Payment extends Model
      */
     protected $fillable = [
         'quantity',
+        'created_at',
     ];
 
     protected $appends = [

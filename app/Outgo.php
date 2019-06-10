@@ -24,7 +24,8 @@ class Outgo extends Model
      * @var array
      */
     protected $fillable = [
-        'description', 'quantity', 'notes', 'share_outgo', 'points', 'initial_liters', 'finished_at'
+        'description', 'quantity', 'notes', 'share_outgo', 'points', 'initial_liters', 'finished_at',
+        'created_at',
     ];
 
     protected $appends = [

@@ -65,7 +65,9 @@ Route::get('/signup3', 'VehicleController@signup3');
 // Reset database
 Route::get('reset-database', function (Request $request) {
     //return shell_exec('php artisan migrate:rollback') . shell_exec('php artisan migrate');
+    \Illuminate\Support\Facades\DB::statement('SET FOREIGN_KEY_CHECKS = 0');
     \Illuminate\Support\Facades\Artisan::call('migrate:rollback');
+    \Illuminate\Support\Facades\DB::statement('SET FOREIGN_KEY_CHECKS = 1');
     \Illuminate\Support\Facades\Artisan::call('migrate');
     return "Yey! Data has been reset. Go back to your tests, little grasshopper!";
 });

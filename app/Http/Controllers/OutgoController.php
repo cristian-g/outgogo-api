@@ -56,7 +56,7 @@ class OutgoController extends Controller
             $diffInSeconds = $now->diffInSeconds($lastOutgo->finished_at);
         }
 
-        $gasPrice = 1.26;
+        $gasPrice = 1.25;
 
         if ($lastOutgo == null || $diffInSeconds > 45) {
 

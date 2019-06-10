@@ -78,12 +78,23 @@ class User extends Authenticatable implements Auth0UserRepository
         $user = User::where("auth0id", $profile->user_id)->first();
 
         if ($user === null) {
-            // If not, create one
-            $user = new User();
-            $user->email = $profile->email; // you should ask for the email scope
-            $user->auth0id = $profile->user_id;
-            $user->name = $profile->name; // you should ask for the name scope
-            $user->save();
+
+            $user_by_email = User::where("email", $profile->email)->first();
+
+            if ($user_by_email === null) {
+                // If not, create one
+                $user = new User();
+                $user->email = $profile->email; // you should ask for the email scope
+                $user->auth0id = $profile->user_id;
+                $user->name = $profile->name; // you should ask for the name scope
+                $user->save();
+            }
+            else {
+                $user_by_email->update([
+                    "auth0id" => $profile->user_id,
+                    "name" => $profile->name,
+                ]);
+            }
         }
 
         return $user;

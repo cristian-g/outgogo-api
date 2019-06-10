@@ -30,62 +30,6 @@ class CreateUserVehicleTable extends Migration
 
             $table->timestamps();
         });
-        /*$user1 = \App\User::create([
-            'name' => 'Àngela',
-            'surnames' => 'Brunet',
-            'email' => 'usuario2test@cristiangonzalez.com',
-            'auth0id' => 'sample_id1',
-            'password' => null,
-        ]);*/
-        $user2 = \App\User::create([
-            'name' => 'Albert',
-            'surnames' => 'Martínez',
-            'email' => 'albert.martinez@gmail.com',
-            'auth0id' => 'sample_id2',
-            'password' => null,
-        ]);
-        $user3 = \App\User::create([
-            'name' => 'Marc',
-            'surnames' => 'Segura',
-            'email' => 'marc.segura@gmail.com',
-            'auth0id' => 'sample_id3',
-            'password' => null,
-        ]);
-        /*$user4 = \App\User::create([
-            'name' => 'Pol',
-            'surnames' => 'Vales',
-            'email' => 'usuario3test@cristiangonzalez.com',
-            'auth0id' => 'sample_id4',
-            'password' => null,
-        ]);*/
-        $user5 = \App\User::create([
-            'name' => 'Cristian',
-            'surnames' => 'González',
-            'email' => 'cristian.gonzalez@gmail.com',
-            'auth0id' => 'sample_id5',
-            'password' => null,
-        ]);
-        $first_vehicle = \App\Vehicle::first();
-        /*$first_vehicle->users()->attach($user1, [
-            'public_key' => 1,
-            'is_owner' => true,
-        ]);
-        $first_vehicle->users()->attach($user2, [
-            'public_key' => 2,
-            'is_owner' => false,
-        ]);
-        $first_vehicle->users()->attach($user3, [
-            'public_key' => 3,
-            'is_owner' => false,
-        ]);
-        $first_vehicle->users()->attach($user4, [
-            'public_key' => 4,
-            'is_owner' => false,
-        ]);
-        $first_vehicle->users()->attach($user5, [
-            'public_key' => 5,
-            'is_owner' => false,
-        ]);*/
     }
 
     /**
