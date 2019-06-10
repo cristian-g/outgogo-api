@@ -209,7 +209,7 @@ class CreateActionsTable extends Migration
             //'notes' => $request->notes, // only add them if filled in request!
             //'share_outgo' => $request->share_outgo, // only add them if filled in request!
             //'points' => $request->points, // only add them if filled in request!
-            'created_at' => '2019-06-06 19:14:29',
+            'created_at' => '2019-06-06 20:14:29',
         ]);
 
         $outgoCategory = OutgoCategory::where([
@@ -225,7 +225,7 @@ class CreateActionsTable extends Migration
         $original_outgo = $outgo;
 
         $action = new Action([
-            'created_at' => '2019-06-06 19:14:29',
+            'created_at' => '2019-06-06 20:14:29',
         ]);
 
         $action->outgo_id = $outgo->id;
@@ -242,7 +242,7 @@ class CreateActionsTable extends Migration
                 'notes' => "",
                 'share_outgo' => true,
                 'points' => abs($quantity) * 100,
-                'created_at' => '2019-06-06 21:14:29',
+                'created_at' => '2019-06-06 20:14:29',
             ]);
             $outgo->vehicle()->associate($vehicle);
             $outgo->user()->associate($user);
