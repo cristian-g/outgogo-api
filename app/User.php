@@ -86,13 +86,13 @@ class User extends Authenticatable implements Auth0UserRepository
                 $user = new User();
                 $user->email = $profile->email; // you should ask for the email scope
                 $user->auth0id = $profile->user_id;
-                //$user->name = $profile->name; // you should ask for the name scope
+                $user->name = $profile->name; // you should ask for the name scope
                 $user->save();
             }
             else {
                 $user_by_email->update([
                     "auth0id" => $profile->user_id,
-                    "name" => $profile->name,
+                    //"name" => $profile->name,
                 ]);
             }
         }
