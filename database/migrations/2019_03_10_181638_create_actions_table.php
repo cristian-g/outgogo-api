@@ -242,7 +242,7 @@ class CreateActionsTable extends Migration
                 'notes' => "",
                 'share_outgo' => true,
                 'points' => abs($quantity) * 100,
-                'created_at' => '2019-06-06 20:14:29',
+                'created_at' => '2019-06-06 21:14:29',
             ]);
             $outgo->vehicle()->associate($vehicle);
             $outgo->user()->associate($user);
