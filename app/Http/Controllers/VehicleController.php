@@ -44,16 +44,10 @@ class VehicleController extends Controller
             array(
                 'marca' => $request->brand,
                 'modelo' => $request->model,
-                'año de compra' => $request->year,
-                'importe de compra' => $request->price,
-                'clave' => $request->key,
             ),
             array(
                 'marca' => array('required'),
                 'modelo' => array('required'),
-                'año de compra' => array('required', 'numeric'),
-                'importe de compra' => array('required', 'numeric'),
-                'clave' => array('required'),
             )
         );
         if ($validation->fails() ) {
@@ -67,7 +61,6 @@ class VehicleController extends Controller
             return response()->json(['errors' => $array2], 500);
         }
 
-        $bytes = 40;
         $vehicle = new Vehicle([
             'brand' => $request->brand,
             'model' => $request->model,
@@ -76,20 +69,19 @@ class VehicleController extends Controller
 
         // Attach owner
         $vehicle->users()->attach($owner, [
-            'public_key' => '2f4c',
             'is_owner' => true
         ]);
 
         // Attach other users
         foreach ($request->emails as $email) {
+            if ($email == '') continue;
             $user_share = User::where('email', $email)->first();
             if ($user_share == null) {
                 $vehicle->users()->detach();
                 $vehicle->delete();
-                throw new \Exception();
+                return response()->json(['errors' => ['El email introducido no pertenece a un usuario existente.']], 400);
             }
             $vehicle->users()->attach($user_share, [
-                'public_key' => bin2hex(openssl_random_pseudo_bytes(40)),
                 'is_owner' => false
             ]);
         }
@@ -235,12 +227,13 @@ class VehicleController extends Controller
 
         // Attach other users
         foreach ($request->emails as $email) {
+            if ($email == '') continue;
+
             $user = User::where('email', $email)->first();
 
             // Only attach it if it is not already attached
             if (!in_array($user->id, $user_ids)) {
                 $vehicle->users()->attach($user, [
-                    'public_key' => bin2hex(openssl_random_pseudo_bytes(40)),
                     'is_owner' => false
                 ]);
             }
