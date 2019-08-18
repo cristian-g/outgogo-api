@@ -46,12 +46,6 @@ Route::get('/payment/{id}', 'PaymentController@show')->middleware('jwt');
 Route::put('/payment/{id}', 'PaymentController@update')->middleware('jwt');
 
 // ------------------------------
-// From vehicle
-// ------------------------------
-Route::post('drive', 'OutgoController@storeFromVehicle');
-Route::post('list', 'OutgoController@indexFromVehicle');
-
-// ------------------------------
 // Fake
 // ------------------------------
 Route::get('/fake0', 'VehicleController@fake0');

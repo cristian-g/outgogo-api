@@ -18,10 +18,6 @@ class CreateVehiclesTable extends Migration
             $table->uuid('id'); $table->primary('id');
             $table->string('brand');
             $table->string('model');
-            $table->string('private_key')->unique();
-            $table->string('public_key')->unique();
-            $table->year('purchase_year');
-            $table->unsignedDecimal('purchase_price', 8, 2);
             $table->timestamps();
         });
     }

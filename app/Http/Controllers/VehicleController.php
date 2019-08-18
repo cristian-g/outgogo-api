@@ -71,10 +71,6 @@ class VehicleController extends Controller
         $vehicle = new Vehicle([
             'brand' => $request->brand,
             'model' => $request->model,
-            'private_key' => bin2hex(openssl_random_pseudo_bytes($bytes)),// will generate a random string of alphanumeric characters of length = $bytes * 2
-            'public_key' => $request->key,//bin2hex(openssl_random_pseudo_bytes(40)),//'a39u',
-            'purchase_year' => $request->year,
-            'purchase_price' => $request->price,
         ]);
         $vehicle->save();
 
@@ -227,10 +223,6 @@ class VehicleController extends Controller
         $vehicle->update([
             'brand' => $request->brand,
             'model' => $request->model,
-            'private_key' => bin2hex(openssl_random_pseudo_bytes($bytes)),// will generate a random string of alphanumeric characters of length = $bytes * 2
-            'public_key' => $request->key,//bin2hex(openssl_random_pseudo_bytes(40)),//'a39u',
-            'purchase_year' => $request->year,
-            'purchase_price' => $request->price,
         ]);
         $vehicle->save();
 

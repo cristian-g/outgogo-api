@@ -25,10 +25,6 @@ class Vehicle extends Model
     protected $fillable = [
         'brand',
         'model',
-        'private_key',
-        'public_key',
-        'purchase_year',
-        'purchase_price',
     ];
 
     protected $appends = [
@@ -64,9 +60,6 @@ class Vehicle extends Model
 
     public function getSharingStatusAttribute()
     {
-        //return $this->users()->first()->email;
-        //return "example@example.com";
-
         $userInfo = Auth0::jwtUser();
         $user = User::where('auth0id', $userInfo->sub)->first();
 
@@ -74,7 +67,6 @@ class Vehicle extends Model
             "vehicle_id" => $this->id,
             "user_id" => $user->id,
         ])->first();
-        //return \GuzzleHttp\json_encode($relation_data->is_owner);
 
         if ($relation_data->is_owner === 1) {
             $shares = DB::table('user_vehicle')->where([
@@ -102,8 +94,6 @@ class Vehicle extends Model
             $owner = User::find($relation_data_owner->user_id)->first();
             return $owner->name;
         }
-
-        return null;
     }
 
     /**

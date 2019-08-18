@@ -71,10 +71,6 @@ class CreateActionsTable extends Migration
         $first_vehicle = Vehicle::create([
             'brand' => 'Toyota',
             'model' => 'Prius',
-            'private_key' => "add133ccccef4569f93cd5c963ff8c47f43153c811705c91c3aa16a4263bcadd8919482e29fefa9e8cd3dad1ae2bd57523d81323cc906d1448b34a8db99a9ab664273b506d89",//bin2hex(openssl_random_pseudo_bytes($bytes)),// will generate a random string of alphanumeric characters of length = $bytes * 2
-            'public_key' => 'a39u',
-            'purchase_year' => 2010,
-            'purchase_price' => 22000.00,
         ]);
 
         // Attach users
