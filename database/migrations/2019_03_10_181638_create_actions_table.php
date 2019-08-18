@@ -41,7 +41,7 @@ class CreateActionsTable extends Migration
         $main_user1 = User::create([
             'name' => 'Albert',
             'surnames' => 'Martínez',
-            'email' => 'albert.martinez@cristiangonzalez.com',
+            'email' => 'usuario1test@cristiangonzalez.com',
             'auth0id' => 'sample_id2',
             'password' => null,
         ]);
@@ -67,7 +67,6 @@ class CreateActionsTable extends Migration
 
         // Sign up vehicle
         //$first_vehicle = Vehicle::first();
-        $bytes = 70;
         $first_vehicle = Vehicle::create([
             'brand' => 'Toyota',
             'model' => 'Prius',
@@ -75,27 +74,21 @@ class CreateActionsTable extends Migration
 
         // Attach users
         $first_vehicle->users()->attach($main_user1, [
-            'public_key' => 1,
             'is_owner' => true,
         ]);
         $first_vehicle->users()->attach($main_user2, [
-            'public_key' => 2,
             'is_owner' => false,
         ]);
         $first_vehicle->users()->attach($main_user3, [
-            'public_key' => 3,
             'is_owner' => false,
         ]);
         /*$first_vehicle->users()->attach($aux_user1, [
-            'public_key' => 4,
             'is_owner' => false,
         ]);
         $first_vehicle->users()->attach($aux_user2, [
-            'public_key' => 5,
             'is_owner' => false,
         ]);
         $first_vehicle->users()->attach($aux_user3, [
-            'public_key' => 6,
             'is_owner' => false,
         ]);*/
 
@@ -361,7 +354,7 @@ class CreateActionsTable extends Migration
         $user = User::create([
             'name' => 'Usuario 1',
             'surnames' => '',
-            'email' => 'usuario1test@cristiangonzalez.com',
+            'email' => 'usuario1testing@cristiangonzalez.com',
             'auth0id' => 'usuario1test',
             'password' => null,
         ]);
@@ -374,7 +367,7 @@ class CreateActionsTable extends Migration
         $user = User::create([
             'name' => 'Usuario 2',
             'surnames' => '',
-            'email' => 'usuario2test@cristiangonzalez.com',
+            'email' => 'usuario2testing@cristiangonzalez.com',
             'auth0id' => 'usuario2test',
             'password' => null,
         ]);
@@ -387,7 +380,7 @@ class CreateActionsTable extends Migration
         $user = User::create([
             'name' => 'Usuario 3',
             'surnames' => '',
-            'email' => 'usuario3test@cristiangonzalez.com',
+            'email' => 'usuario3testing@cristiangonzalez.com',
             'auth0id' => 'usuario3test',
             'password' => null,
         ]);
