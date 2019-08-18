@@ -25,8 +25,7 @@ class CreateUserVehicleTable extends Migration
             $table->foreign('vehicle_id')->references('id')->on('vehicles');
 
             $table->boolean('is_owner');
-            $table->string('public_key');
-            $table->unique(['vehicle_id', 'public_key']);
+            $table->unique(['vehicle_id', 'user_id']);
 
             $table->timestamps();
         });
