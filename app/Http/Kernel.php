@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\CheckPlatformVersion;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -41,6 +42,7 @@ class Kernel extends HttpKernel
         'api' => [
             'throttle:60,1',
             'bindings',
+            'checkPlatformVersion',
         ],
     ];
 
@@ -60,5 +62,6 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'jwt' => \App\Http\Middleware\CheckJWT::class,
         'check.scope' => \App\Http\Middleware\CheckScope::class,
+        'checkPlatformVersion' => CheckPlatformVersion::class,
     ];
 }

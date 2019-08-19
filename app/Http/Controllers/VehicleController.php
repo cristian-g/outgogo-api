@@ -211,7 +211,6 @@ class VehicleController extends Controller
     {
         $vehicle = Vehicle::find($id);
 
-        $bytes = 40;
         $vehicle->update([
             'brand' => $request->brand,
             'model' => $request->model,
