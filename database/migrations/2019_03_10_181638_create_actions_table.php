@@ -40,21 +40,21 @@ class CreateActionsTable extends Migration
         // Sign up main users
         $main_user1 = User::create([
             'name' => 'Albert',
-            'surnames' => 'Martínez',
+            'surnames' => '',
             'email' => 'usuario1test@cristiangonzalez.com',
             'auth0id' => 'sample_id2',
             'password' => null,
         ]);
         $main_user2 = User::create([
             'name' => 'Àngela',
-            'surnames' => 'Brunet',
+            'surnames' => '',
             'email' => 'angela.brunet@cristiangonzalez.com',
             'auth0id' => 'sample_id1',
             'password' => null,
         ]);
         $main_user3 = User::create([
             'name' => 'Cristian',
-            'surnames' => 'González',
+            'surnames' => '',
             'email' => 'cristian@cristiangonzalez.com',
             'auth0id' => 'sample_id5',
             'password' => null,
@@ -98,7 +98,7 @@ class CreateActionsTable extends Migration
         $this->fake2($main_user3);// user3
 
         $receiver = $main_user1;
-        $this->fake3($main_user2, $receiver);// user2
+        $this->fake3($receiver, $main_user3);// user2
     }
 
     /**
@@ -129,7 +129,7 @@ class CreateActionsTable extends Migration
         $outgo = new Outgo([
             'quantity' => $quantity,
             'description' => $description,
-            'initial_liters' => 19.4,
+            'gas_liters' => 19.4,
             //'notes' => $request->notes, // only add them if filled in request!
             //'share_outgo' => $request->share_outgo, // only add them if filled in request!
             //'points' => $request->points, // only add them if filled in request!
@@ -194,7 +194,7 @@ class CreateActionsTable extends Migration
         $outgo = new Outgo([
             'quantity' => $quantity,
             'description' => $description,
-            'initial_liters' => 36.4,
+            'gas_liters' => 36.4,
             //'notes' => $request->notes, // only add them if filled in request!
             //'share_outgo' => $request->share_outgo, // only add them if filled in request!
             //'points' => $request->points, // only add them if filled in request!
@@ -262,10 +262,8 @@ class CreateActionsTable extends Migration
         $outgo = new Outgo([
             'quantity' => $quantity * (-1),
             'description' => $description,
-            'initial_liters' => 0,
-            //'notes' => $request->notes, // only add them if filled in request!
-            //'share_outgo' => $request->share_outgo, // only add them if filled in request!
-            //'points' => $request->points, // only add them if filled in request!
+            'gas_liters' => 0,
+            'created_at' => '2019-06-10 15:23:56',
         ]);
 
         $outgoCategory = OutgoCategory::where([
@@ -281,6 +279,7 @@ class CreateActionsTable extends Migration
         $original_outgo = $outgo;
 
         $action = new Action([
+            'created_at' => '2019-06-10 15:23:56',
         ]);
 
         $action->outgo_id = $outgo->id;
@@ -332,7 +331,7 @@ class CreateActionsTable extends Migration
 
         $payment = new Payment([
             'quantity' => $payment_quantity,
-            'created_at' => '2019-06-10 15:23:56',
+            'created_at' => '2019-09-01 07:23:56',
         ]);
 
         $payment->vehicle()->associate($vehicle);

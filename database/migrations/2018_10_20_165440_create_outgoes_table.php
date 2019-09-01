@@ -42,7 +42,8 @@ class CreateOutgoesTable extends Migration
             $table->string('description');
             $table->decimal('quantity', 8, 2);
 
-            $table->float('initial_liters')->nullable()->default(null);
+            $table->float('gas_liters')->nullable()->default(null);
+            $table->float('gas_price')->nullable()->default(null);
             $table->timestamp('finished_at')->default(DB::raw('CURRENT_TIMESTAMP'));
 
             $table->string('notes', 500)->default('');

@@ -111,6 +111,55 @@ class OutgoController extends Controller
     }
 
     /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function storeConsumption(Request $request, $vehicle_id)
+    {
+        $userInfo = Auth0::jwtUser();
+        $user = User::where('auth0id', $userInfo->sub)->first();
+
+        $vehicle = Vehicle::where([
+            "id" => $vehicle_id,
+        ])->first();
+
+        $outgoCategory = OutgoCategory::where([
+            'key_name' => 'drive'
+        ])->first();
+
+        $liters = $request->gas_liters;
+        $gasPrice = $request->gas_price;
+
+        $quantity = $liters * $gasPrice;
+        $description = 'Consumo de ' . $liters . ' litros * ' . $gasPrice . ' €/litro = ' . $quantity . ' €';
+
+        $outgo = new Outgo([
+            'quantity' => $quantity,
+            'description' => $description,
+            'gas_liters' => $liters,
+            'gas_price' => $gasPrice,
+            'notes' => $request->notes,
+            'share_outgo' => true,
+        ]);
+
+        $outgo->vehicle()->associate($vehicle);
+        $outgo->user()->associate($user);
+        $outgo->outgoCategory()->associate($outgoCategory);
+
+        $outgo->save();
+
+        $action = new Action([
+        ]);
+        $action->outgo_id = $outgo->id;
+        $action->vehicle()->associate($vehicle);
+        $action->save();
+
+        return response()->json(null, 200);
+    }
+
+    /**
      * Display the specified resource.
      *
      * @param  int  $id
@@ -147,14 +196,53 @@ class OutgoController extends Controller
         ]);
         $outgo->save();
 
+        $quantity = $request->quantity;
+        // Update distributions
+        self::updateDistributions($outgo, $quantity);
+
+        return response()->json(null, 200);
+    }
+
+    public static function updateDistributions($outgo, $quantity) {
         // Update distributions
         $distributions = $outgo->distributions()->where('receiver_id', '!=' , DB::raw('user_id'))->with(['user', 'receiver'])->get();
         $n_distributions = sizeof($distributions) + 1;
         foreach ($distributions as $distribution) {
             $distribution->update([
-                'quantity' => (abs($request->quantity) * (-1)) / $n_distributions,
+                'quantity' => (abs($quantity) * (-1)) / $n_distributions,
             ]);
         }
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function updateConsumption(Request $request, $id)
+    {
+        $outgo = Outgo::find($id);
+
+        $liters = $request->gas_liters;
+        $gasPrice = $request->gas_price;
+
+        $quantity = $liters * $gasPrice;
+        $description = 'Consumo de ' . $liters . ' litros * ' . $gasPrice . ' €/litro = ' . $quantity . ' €';
+
+        $outgo->update([
+            'quantity' => $quantity,
+            'description' => $description,
+            'gas_liters' => $liters,
+            'gas_price' => $gasPrice,
+            'notes' => $request->notes,
+        ]);
+        $outgo->save();
+
+        $quantity = $request->quantity;
+        // Update distributions
+        self::updateDistributions($outgo, $quantity);
 
         return response()->json(null, 200);
     }
