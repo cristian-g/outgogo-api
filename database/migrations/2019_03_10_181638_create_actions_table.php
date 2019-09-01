@@ -122,7 +122,7 @@ class CreateActionsTable extends Migration
 
         $gasPrice = 1.25;
 
-        $liters = 1.2;
+        $liters = 0.3;
         $quantity = $liters * $gasPrice;
         $description = 'Consumo de ' . $liters . ' litros * ' . $gasPrice . ' €/litro = ' . $quantity . ' €';
 
@@ -187,7 +187,7 @@ class CreateActionsTable extends Migration
 
         $gasPrice = 1.25;
 
-        $liters = 0.3;
+        $liters = 1.2;
         $quantity = $liters * $gasPrice;
         $description = 'Consumo de ' . $liters . ' litros * ' . $gasPrice . ' €/litro = ' . $quantity . ' €';
 
@@ -326,7 +326,7 @@ class CreateActionsTable extends Migration
 
 
         $action = new Action([
-            'created_at' => '2019-06-10 15:23:56',
+            'created_at' => '2019-09-01 07:23:56',
         ]);
 
         $payment = new Payment([
