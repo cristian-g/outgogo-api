@@ -198,7 +198,7 @@ class CreateActionsTable extends Migration
             //'notes' => $request->notes, // only add them if filled in request!
             //'share_outgo' => $request->share_outgo, // only add them if filled in request!
             //'points' => $request->points, // only add them if filled in request!
-            'created_at' => '2019-06-06 20:14:29',
+            'created_at' => '2019-09-01 17:22:56',
         ]);
 
         $outgoCategory = OutgoCategory::where([
@@ -214,7 +214,7 @@ class CreateActionsTable extends Migration
         $original_outgo = $outgo;
 
         $action = new Action([
-            'created_at' => '2019-06-06 20:14:29',
+            'created_at' => '2019-09-01 17:22:56',
         ]);
 
         $action->outgo_id = $outgo->id;
@@ -231,7 +231,7 @@ class CreateActionsTable extends Migration
                 'notes' => "",
                 'share_outgo' => true,
                 'points' => abs($quantity) * 100,
-                'created_at' => '2019-06-06 20:14:29',
+                'created_at' => '2019-09-01 17:22:56',
             ]);
             $outgo->vehicle()->associate($vehicle);
             $outgo->user()->associate($user);
@@ -263,7 +263,7 @@ class CreateActionsTable extends Migration
             'quantity' => $quantity * (-1),
             'description' => $description,
             'gas_liters' => 0,
-            'created_at' => '2019-06-10 15:23:56',
+            'created_at' => '2019-09-02 12:33:56',
         ]);
 
         $outgoCategory = OutgoCategory::where([
@@ -279,7 +279,7 @@ class CreateActionsTable extends Migration
         $original_outgo = $outgo;
 
         $action = new Action([
-            'created_at' => '2019-06-10 15:23:56',
+            'created_at' => '2019-09-02 12:33:56',
         ]);
 
         $action->outgo_id = $outgo->id;
@@ -296,6 +296,7 @@ class CreateActionsTable extends Migration
                 'notes' => "",
                 'share_outgo' => true,
                 'points' => abs($quantity) * 100,
+                'created_at' => '2019-09-02 12:33:56',
             ]);
             $outgo->vehicle()->associate($vehicle);
             $outgo->user()->associate($user);
@@ -326,12 +327,12 @@ class CreateActionsTable extends Migration
 
 
         $action = new Action([
-            'created_at' => '2019-09-01 07:23:56',
+            'created_at' => '2019-09-03 07:23:56',
         ]);
 
         $payment = new Payment([
             'quantity' => $payment_quantity,
-            'created_at' => '2019-09-01 07:23:56',
+            'created_at' => '2019-09-03 07:23:56',
         ]);
 
         $payment->vehicle()->associate($vehicle);
