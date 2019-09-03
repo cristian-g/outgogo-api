@@ -94,6 +94,7 @@ class User extends Authenticatable implements Auth0UserRepository
                     "auth0id" => $profile->user_id,
                     //"name" => $profile->name,
                 ]);
+                $user = $user_by_email;
             }
         }
 
