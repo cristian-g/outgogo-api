@@ -88,6 +88,12 @@ class OutgoController extends Controller
         $action->vehicle()->associate($vehicle);
         $action->save();
 
+        self::storeDistributions($original_outgo, $request, $vehicle, $user, $outgoCategory);
+
+        return response()->json(null, 200);
+    }
+
+    public static function storeDistributions($original_outgo, $request, $vehicle, $user, $outgoCategory) {
         // Distribute the outgo to current existing users
         $users = $vehicle->users()->get();
         $n_users = sizeof($users);
@@ -106,8 +112,6 @@ class OutgoController extends Controller
             $outgo->outgoCategory()->associate($outgoCategory);
             $outgo->save();
         }
-
-        return response()->json(null, 200);
     }
 
     /**
@@ -155,6 +159,8 @@ class OutgoController extends Controller
         $action->outgo_id = $outgo->id;
         $action->vehicle()->associate($vehicle);
         $action->save();
+
+        self::storeDistributions($outgo, $request, $vehicle, $user, $outgoCategory);
 
         return response()->json(null, 200);
     }
