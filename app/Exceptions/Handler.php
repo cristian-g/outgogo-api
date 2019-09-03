@@ -49,7 +49,7 @@ class Handler extends ExceptionHandler
     public function render($request, Exception $exception)
     {
         if ($exception instanceof \ErrorException) {
-            return response()->json(['errors' => ['Error desconocido. Por favor, inténtalo de nuevo más tarde.' . json_encode($exception->getMessage())]], 500);
+            return response()->json(['errors' => ['Error desconocido. Por favor, inténtalo de nuevo más tarde.']], 500);
         }
         //return parent::render($request, $exception);
     }
