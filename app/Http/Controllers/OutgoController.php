@@ -160,7 +160,7 @@ class OutgoController extends Controller
         $action->vehicle()->associate($vehicle);
         $action->save();
 
-        self::storeDistributions($outgo, $request, $vehicle, $user, $outgoCategory, $quantity * (-1));
+        self::storeDistributions($outgo, $request, $vehicle, $user, $outgoCategory, $quantity);
 
         return response()->json(null, 200);
     }
@@ -247,7 +247,7 @@ class OutgoController extends Controller
         $outgo->save();
 
         // Update distributions
-        self::updateDistributions($outgo, $quantity * (-1));
+        self::updateDistributions($outgo, $quantity);
 
         return response()->json(null, 200);
     }
