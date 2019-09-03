@@ -35,7 +35,7 @@ class CheckJWT
         $accessToken = $request->bearerToken();
 
         if (!isset($accessToken)) {
-            return response()->json(["errors" => ["Es necesario iniciar sesión para realizar esta acción."]], 401);
+            return response()->json(["message" => "Es necesario iniciar sesión para realizar esta acción."], 401);
         }
 
         try {
