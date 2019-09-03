@@ -246,7 +246,6 @@ class OutgoController extends Controller
         ]);
         $outgo->save();
 
-        $quantity = $request->quantity;
         // Update distributions
         self::updateDistributions($outgo, $quantity);
 
