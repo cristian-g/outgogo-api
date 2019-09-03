@@ -230,6 +230,10 @@ class VehicleController extends Controller
 
             $user = User::where('email', $email)->first();
 
+            if ($user == null) {
+                return response()->json(['errors' => ['El email introducido no pertenece a un usuario existente.']], 400);
+            }
+
             // Only attach it if it is not already attached
             if (!in_array($user->id, $user_ids)) {
                 $vehicle->users()->attach($user, [
