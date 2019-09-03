@@ -88,18 +88,18 @@ class OutgoController extends Controller
         $action->vehicle()->associate($vehicle);
         $action->save();
 
-        self::storeDistributions($original_outgo, $request, $vehicle, $user, $outgoCategory);
+        self::storeDistributions($original_outgo, $request, $vehicle, $user, $outgoCategory, (abs($request->quantity) * (-1)));
 
         return response()->json(null, 200);
     }
 
-    public static function storeDistributions($original_outgo, $request, $vehicle, $user, $outgoCategory) {
+    public static function storeDistributions($original_outgo, $request, $vehicle, $user, $outgoCategory, $quantity) {
         // Distribute the outgo to current existing users
         $users = $vehicle->users()->get();
         $n_users = sizeof($users);
         foreach ($users as $aux_user) {
             $outgo = new Outgo([
-                'quantity' => (abs($request->quantity) * (-1)) / $n_users,
+                'quantity' => $quantity / $n_users,
                 'description' => ($request->description == null) ? "" : $request->description,
                 'notes' => ($request->notes == null) ? "" : $request->notes,
                 'share_outgo' => $request->share_outgo,
@@ -160,7 +160,7 @@ class OutgoController extends Controller
         $action->vehicle()->associate($vehicle);
         $action->save();
 
-        self::storeDistributions($outgo, $request, $vehicle, $user, $outgoCategory);
+        self::storeDistributions($outgo, $request, $vehicle, $user, $outgoCategory, $quantity * (-1));
 
         return response()->json(null, 200);
     }
@@ -247,7 +247,7 @@ class OutgoController extends Controller
         $outgo->save();
 
         // Update distributions
-        self::updateDistributions($outgo, $quantity);
+        self::updateDistributions($outgo, $quantity * (-1));
 
         return response()->json(null, 200);
     }
