@@ -247,7 +247,7 @@ class OutgoController extends Controller
         $outgo->save();
 
         // Update distributions
-        self::updateDistributions($outgo, $quantity);
+        self::updateDistributions($outgo, $quantity * (-1));
 
         return response()->json(null, 200);
     }
