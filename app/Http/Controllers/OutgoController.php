@@ -204,7 +204,7 @@ class OutgoController extends Controller
 
         $quantity = $request->quantity;
         // Update distributions
-        self::updateDistributions($outgo, $quantity);
+        self::updateDistributions($outgo, (abs($quantity) * (-1)));
 
         return response()->json(null, 200);
     }
@@ -215,7 +215,7 @@ class OutgoController extends Controller
         $n_distributions = sizeof($distributions) + 1;
         foreach ($distributions as $distribution) {
             $distribution->update([
-                'quantity' => (abs($quantity) * (-1)) / $n_distributions,
+                'quantity' => $quantity / $n_distributions,
             ]);
         }
     }
@@ -247,7 +247,7 @@ class OutgoController extends Controller
         $outgo->save();
 
         // Update distributions
-        self::updateDistributions($outgo, $quantity * (-1));
+        self::updateDistributions($outgo, $quantity);
 
         return response()->json(null, 200);
     }
