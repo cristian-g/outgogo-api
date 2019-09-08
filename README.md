@@ -4,6 +4,10 @@
 
 </p>
 
+<p align="center">
+    <img src="docs/sticker-outgogo-net.png">
+</p>
+
 ## About this project
 
 This is the Outgogo API, which uses Laravel PHP framework. Outgogo allows to manage different expenses of a shared car to distribute them to the users using the same car.
